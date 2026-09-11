@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sombra Entre Mundos — Capítulos 1 a 3</title>
+<style>
+  :root{
+    --night: #14121f;
+    --night-2: #1c1829;
+    --panel: #201c30;
+    --moon: #d7dcec;
+    --moon-dim: #9aa0bd;
+    --ember: #b1472b;
+    --ember-soft: #7a3a2a;
+    --gold: #b89550;
+    --dread: #5b4a72;
+    --ink: #09080f;
+  }
+  *{ box-sizing: border-box; }
+  html,body{
+    margin:0; padding:0; height:100%;
+    background: var(--ink);
+    font-family: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
+    overflow: hidden;
+  }
+  #frame{
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    max-height: 900px;
+    margin: 0 auto;
+    overflow: hidden;
+    background: var(--night);
+  }
+  #scene{
+    position:absolute; inset:0;
+    transition: filter 900ms ease;
+    overflow: hidden;
+    background: var(--night);
+  }
+  #scene img{
+    width:100%; height:100%; object-fit: cover;
+    display:block;
+  }
+  #vignette{
+    position:absolute; inset:0;
+    background: radial-gradient(ellipse at 50% 40%, rgba(0,0,0,0) 35%, rgba(9,8,15,0.75) 100%);
+    pointer-events:none;
+  }
+  #title-card{
+    position:absolute; inset:0;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    background: var(--ink);
+    z-index: 30;
+    transition: opacity 1200ms ease;
+    text-align:center;
+    padding: 0 8%;
+  }
+  #title-card h1{
+    color: var(--moon);
+    font-weight: 400;
+    font-size: 1.7rem;
+    letter-spacing: 0.04em;
+    margin: 0 0 0.4rem 0;
+    font-style: italic;
+  }
+  #title-card p{
+    color: var(--gold);
+    font-size: 0.95rem;
+    margin: 0 0 2.2rem 0;
+    letter-spacing: 0.08em;
+  }
+  #title-card button{
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-family: inherit;
+    font-size: 1rem;
+    padding: 0.7rem 2.2rem;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+  }
+  #title-card button:hover{ background: rgba(184,149,80,0.12); }
+
+  #hud{
+    position:absolute; top:0; left:0; right:0;
+    display:flex; justify-content:space-between; align-items:flex-start;
+    padding: 0.9rem 1.1rem 0.7rem 1.1rem;
+    z-index:5;
+    pointer-events:none;
+    background: linear-gradient(180deg, rgba(9,8,15,0.92) 0%, rgba(9,8,15,0.75) 65%, rgba(9,8,15,0) 100%);
+    border-bottom: 1px solid rgba(184,149,80,0.28);
+    backdrop-filter: blur(2px);
+  }
+  #chapter-label{
+    color: var(--moon-dim);
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    font-style: italic;
+  }
+  #meta{
+    display:flex; flex-direction:column; align-items:flex-end;
+    gap: 0.25rem;
+  }
+  .meta-row{ display:flex; align-items:center; gap:0.4rem; }
+  .meta-label{ color: var(--moon-dim); font-size:0.68rem; letter-spacing:0.05em; }
+  .dots{ display:flex; gap:3px; }
+  .dot{ width:6px; height:6px; border-radius:50%; background: rgba(255,255,255,0.15); }
+  .dot.on-fear{ background: var(--dread); }
+  .dot.on-resolve{ background: var(--ember); }
+
+  #portrait-wrap{
+    position:absolute;
+    bottom: 28%;
+    left:0; right:0;
+    display:flex; justify-content:center;
+    gap: 14px;
+    z-index:3;
+    pointer-events:none;
+  }
+  .portrait-slot{
+    width: 175px;
+    border-radius: 4px;
+    filter: drop-shadow(0 10px 26px rgba(0,0,0,0.6));
+    transition: transform 400ms ease, opacity 400ms ease, filter 400ms ease;
+  }
+  #portrait-wrap.single .portrait-slot{ width: 208px; }
+
+  #dialogue{
+    position:absolute; left:0; right:0; bottom:0;
+    z-index:10;
+    padding: 0 5%;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  #box{
+    background: linear-gradient(180deg, rgba(28,24,41,0.0), var(--panel) 18%);
+    border-top: 1px solid rgba(184,149,80,0.35);
+    padding: 1.1rem 1.2rem 1.4rem 1.2rem;
+    min-height: 130px;
+    position: relative;
+  }
+  #speaker{
+    display: inline-block;
+    color: var(--gold);
+    font-style: italic;
+    font-size: 0.95rem;
+    margin-bottom: 0.45rem;
+    letter-spacing: 0.02em;
+  }
+  #text{
+    color: var(--moon);
+    font-size: 1.05rem;
+    line-height: 1.55;
+    min-height: 3.4em;
+  }
+  #tap-hint{
+    position:absolute; right: 1.1rem; bottom: 0.6rem;
+    color: var(--moon-dim);
+    font-size: 0.75rem;
+    font-style: italic;
+    opacity: 0.7;
+    animation: pulse 1.8s infinite ease-in-out;
+  }
+  @keyframes pulse{ 0%,100%{opacity:0.35;} 50%{opacity:0.85;} }
+
+  #choices{
+    display:none;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-top: 0.8rem;
+  }
+  #choices.show{ display:flex; }
+  .choice-btn{
+    background: rgba(20,18,31,0.6);
+    border: 1px solid rgba(184,149,80,0.4);
+    color: var(--moon);
+    font-family: inherit;
+    font-size: 0.98rem;
+    text-align: left;
+    padding: 0.7rem 0.9rem;
+    cursor: pointer;
+    transition: border-color 200ms ease, background 200ms ease;
+  }
+  .choice-btn:hover{ border-color: var(--gold); background: rgba(184,149,80,0.1); }
+
+  #click-catcher{
+    position:absolute; inset:0;
+    z-index: 8;
+  }
+
+  #end-card{
+    position:absolute; inset:0;
+    background: var(--ink);
+    display:none;
+    flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding: 0 10%;
+    z-index: 40;
+  }
+  #end-card.show{ display:flex; }
+  #end-card h2{ color: var(--gold); font-style:italic; font-weight:400; font-size:1.3rem; margin-bottom:0.6rem; }
+  #end-card p{ color: var(--moon-dim); font-size:0.9rem; line-height:1.6; }
+
+  #nav-bar{
+    position:absolute; top: 2.5rem; left:0; right:0;
+    display:flex; justify-content:center; align-items:center;
+    gap: 0.5rem;
+    z-index: 9;
+    padding: 0.3rem 0;
+    pointer-events: none;
+  }
+  #nav-bar button{
+    pointer-events: auto;
+    background: rgba(9,8,15,0.7);
+    border: 1px solid rgba(184,149,80,0.35);
+    color: var(--moon-dim);
+    font-family: inherit;
+    font-size: 0.72rem;
+    padding: 0.28rem 0.7rem;
+    cursor: pointer;
+    border-radius: 2px;
+  }
+  #nav-bar button:hover{ color: var(--gold); border-color: var(--gold); }
+  #nav-chapters-menu{
+    position:absolute; top: 4.6rem; left:50%; transform: translateX(-50%);
+    display:none; flex-direction:column;
+    background: var(--night-2);
+    border: 1px solid rgba(184,149,80,0.4);
+    z-index: 9;
+    min-width: 220px;
+    pointer-events: auto;
+  }
+  #nav-chapters-menu.show{ display:flex; }
+  #nav-chapters-menu .chapter-jump-btn{
+    color: var(--moon);
+    font-size: 0.82rem;
+    text-decoration: none;
+    padding: 0.55rem 0.8rem;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    background: none; border-left: none; border-right: none; border-top: none;
+    text-align: left; font-family: inherit; cursor: pointer;
+  }
+  #nav-chapters-menu .chapter-jump-btn:last-child{ border-bottom: none; }
+  #nav-chapters-menu .chapter-jump-btn:hover{ background: rgba(184,149,80,0.1); color: var(--gold); }
+
+  .codex-link{
+    color: var(--gold);
+    font-size: 0.7rem;
+    font-style: italic;
+    cursor: pointer;
+    pointer-events: auto;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    background: none;
+    border: none;
+    font-family: inherit;
+  }
+  #title-card #codex-btn-title{
+    margin-top: 1.1rem;
+    border: none;
+    padding: 0;
+  }
+
+  #codex{
+    position:absolute; inset:0;
+    z-index: 50;
+    background: var(--ink);
+    display:none;
+    flex-direction: column;
+    padding: 1.2rem 1.3rem 1.4rem;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  #codex.show{ display:flex; }
+
+  #gallery{
+    position:absolute; inset:0;
+    z-index: 51;
+    background: var(--ink);
+    display:none;
+    flex-direction: column;
+    padding: 1.2rem 1.3rem 1.4rem;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  #gallery.show{ display:flex; }
+  #gallery h2{
+    color: var(--gold); font-style: italic; font-weight:400;
+    font-size: 1.25rem; margin: 0 0 0.8rem 0;
+  }
+  #gallery-tabs{ display:flex; gap:0.5rem; margin-bottom:1rem; }
+  .gallery-tab{
+    background: transparent; border: 1px solid rgba(184,149,80,0.4);
+    color: var(--moon-dim); font-family: inherit; font-size: 0.8rem;
+    padding: 0.35rem 0.8rem; cursor:pointer;
+  }
+  .gallery-tab.active{ border-color: var(--gold); color: var(--gold); }
+  #gallery-grid{
+    display:grid; grid-template-columns: 1fr 1fr; gap: 0.7rem;
+  }
+  .gcard{
+    border: 1px solid rgba(184,149,80,0.25);
+    padding: 0.5rem; display:flex; flex-direction:column; gap:0.35rem;
+  }
+  .gcard img{ width:100%; border-radius:2px; display:block; background:#000; }
+  .gcard .gnum{ color: var(--gold); font-size: 0.72rem; font-style:italic; }
+  .gcard .gfield{ color: var(--moon); font-size: 0.68rem; line-height:1.4; }
+  .gcard .gfield b{ color: var(--moon-dim); font-weight:400; }
+  #gallery-close{
+    align-self: flex-end;
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-family: inherit;
+    padding: 0.4rem 1rem;
+    margin-top: 1.4rem;
+    cursor: pointer;
+  }
+  #codex h2{
+    color: var(--gold); font-style: italic; font-weight:400;
+    font-size: 1.25rem; margin: 0 0 1rem 0;
+  }
+  #codex h3{
+    color: var(--gold); font-weight:400; font-size: 0.95rem;
+    margin: 1.3rem 0 0.4rem 0; letter-spacing:0.02em;
+    border-bottom: 1px solid rgba(184,149,80,0.3);
+    padding-bottom: 0.3rem;
+  }
+  #codex p, #codex li{
+    color: var(--moon); font-size: 0.9rem; line-height: 1.55;
+  }
+  #codex ul{ margin: 0.3rem 0; padding-left: 1.1rem; }
+  #codex .tag{
+    color: var(--moon-dim); font-style: italic; font-size:0.78rem;
+  }
+  #codex-close{
+    align-self: flex-end;
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-family: inherit;
+    padding: 0.4rem 1rem;
+    margin-top: 1.4rem;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+<div id="frame">
+
+  <div id="title-card">
+    <h1>Sombra Entre Mundos</h1>
+    <p>capítulos 1 a 3 · edição completa</p>
+    <button id="start-btn">começar</button>
+    <button id="codex-btn-title" class="codex-link">sobre o projeto</button>
+    <button id="gallery-btn-title" class="codex-link">galeria de assets</button>
+  </div>
+
+  <div id="scene"></div>
+  <div id="vignette"></div>
+
+  <div id="hud">
+    <div id="chapter-label">Capítulos 1-3 — Edição Completa <span id="codex-btn" class="codex-link">· sobre o projeto</span> <span id="gallery-btn" class="codex-link">· galeria</span></div>
+    <div id="meta">
+      <div class="meta-row"><span class="meta-label">medo</span><div class="dots" id="fear-dots"></div></div>
+      <div class="meta-row"><span class="meta-label">firmeza</span><div class="dots" id="resolve-dots"></div></div>
+    </div>
+  </div>
+  <div id="nav-bar">
+    <button id="nav-back" title="Voltar">‹</button>
+    <button id="nav-chapters-btn" title="Capítulos">☰ capítulos</button>
+    <button id="nav-forward" title="Avançar">›</button>
+  </div>
+  <div id="nav-chapters-menu">
+    <button class="chapter-jump-btn" data-idx="0">Capítulo 1 — A Floresta Sem Nome</button>
+    <button class="chapter-jump-btn" data-idx="45">Capítulo 2 — Chifre na Escuridão</button>
+    <button class="chapter-jump-btn" data-idx="91">Capítulo 3 — A Casa que Não Dorme</button>
+  </div>
+
+  <div id="portrait-wrap"></div>
+
+  <div id="click-catcher"></div>
+
+  <div id="dialogue">
+    <div id="box">
+      <span id="speaker"></span>
+      <div id="text"></div>
+      <div id="choices"></div>
+      <div id="tap-hint">toque para continuar</div>
+    </div>
+  </div>
+
+  <div id="end-card">
+    <h2>Fim do Capítulo 2</h2>
+    <p>A noite na mansão acaba de começar. O que vem depois pertence ao Capítulo 3.<br><br>(seu progresso foi salvo)</p>
+  </div>
+
+  <div id="codex">
+    <h2>Sombra Entre Mundos — sobre o projeto</h2>
+
+    <h3>Sinopse</h3>
+    <p>Um AU de Re:Zero ambientado a partir da chegada de Subaru à mansão de Roswaal (arcos 2–3 em diante). No mesmo instante em que Subaru chega, <strong>Ma</strong> — uma mulher oni de dois chifres, vinda de um mundo onde humanos caçam onis — surge na floresta próxima, sozinha, sem saber por quê. A história segue os eventos originais da light novel com a maior fidelidade possível, mas com o impacto real da presença de Ma sobre cada personagem, e um mistério só dela para resolver.</p>
+
+    <h3>Pilares tonais</h3>
+    <ul>
+      <li>Mistério e horror psicológico (tensão que cresce devagar, não sustos baratos)</li>
+      <li>Ação e reviravoltas que fogem do previsível</li>
+      <li>Humor genuíno, no mesmo tom leve/cômico que intercala com o peso da LN</li>
+      <li>Cenas para chorar e cenas para rir — o contraste é proposital</li>
+      <li>Romance e intimidade emocional profunda, não só física</li>
+      <li>Fidelidade máxima aos personagens e eventos originais</li>
+    </ul>
+    <p class="tag">Conteúdo adulto: momentos de maior intimidade acontecem narrativamente (fade-to-black) — descritos pelo peso emocional, nunca de forma explícita.</p>
+
+    <h3>Elenco e relações</h3>
+    <ul>
+      <li><strong>Ma</strong> — insegura, medrosa, isolada; mas extremamente empática, boa em cuidar de gente e animais, disposta a se sacrificar pelo bem maior. Chifres intactos, asas com as pontas cortadas (não voa), escamas rubras, consegue elevar a própria temperatura ao ponto de quase soltar fogo — o embrião de uma magia de fogo latente que nunca foi despertada no mundo dela.</li>
+      <li><strong>Subaru</strong> — fiel ao original. Reconhece em Ma outra "isekai'd" sem saber os detalhes ainda.</li>
+      <li><strong>Rem</strong> — fiel ao original, com um fio novo: o romance do projeto é <strong>Rem × Ma</strong>. A devoção incondicional dela (a mesma que no cânone é dirigida a Subaru) nasce, aqui, em direção a Ma — moldada pela desconfiança inicial de uma oni de um só chifre encontrando uma de dois.</li>
+      <li><strong>Ram</strong> — fiel ao original: cortante, protetora da irmã, afiada no humor ácido.</li>
+    </ul>
+
+    <h3>O vínculo do Retorno pela Morte</h3>
+    <p>Ma e Subaru cruzaram para este mundo no mesmo instante e ponto — e a marca da Bruxa que se fixou nele "vazou" para ela também. Ma não tem gatilho próprio: se ela morre sozinha, nada volta. Só quando Subaru morre é que os dois retornam juntos. Ela pode morrer de verdade — e isso é para ser sentido como ameaça real o tempo todo.</p>
+
+    <h3>Sistema de RPG</h3>
+    <p>Combate por turnos de complexidade intermediária: stats (HP, MP, ATK, DEF, Velocidade), rolagem de dados, habilidades desbloqueadas em marcos da história — incluindo o despertar gradual da magia de fogo de Ma.</p>
+
+    <h3>Estado atual</h3>
+    <p>Capítulo 2 de uma história em construção contínua, escrita e revisada em conjunto com quem está jogando.</p>
+
+    <button id="codex-close">fechar</button>
+  </div>
+
+  <div id="gallery">
+    <h2>Galeria de assets</h2>
+    <div id="gallery-tabs">
+      <button class="gallery-tab active" data-cat="personagens">Personagens</button>
+      <button class="gallery-tab" data-cat="especiais">Especiais</button>
+      <button class="gallery-tab" data-cat="fundos">Fundos</button>
+    </div>
+    <div id="gallery-grid"></div>
+    <button id="gallery-close">fechar</button>
+  </div>
+
+</div>
+
+<script>const IMG = {"emilia_default": "emilia_default.jpg","emilia_timida": "emilia_timida.jpg","emilia_paixao": "emilia_paixao.jpg","emilia_seria": "emilia_seria.jpg","emilia_medo": "emilia_medo.jpg","emilia_raiva": "emilia_raiva.jpg","emilia_tristeza": "emilia_tristeza.jpg","bg_corredor_dia": "bg_corredor_dia.jpg","bg_jardim_fonte": "bg_jardim_fonte.jpg","bg_biblioteca": "bg_biblioteca.jpg","bg_cozinha": "bg_cozinha.jpg","bg_entrada_carruagem": "bg_entrada_carruagem.jpg","bg_interrogatorio_v2": "bg_interrogatorio_v2.jpg","bg_quarto_simples": "bg_quarto_simples.jpg","bg_quarto_dia": "bg_quarto_dia.jpg","beatrice_default": "beatrice_default.jpg","beatrice_medo": "beatrice_medo.jpg","beatrice_tristeza": "beatrice_tristeza.jpg","beatrice_seria": "beatrice_seria.jpg","beatrice_raiva": "beatrice_raiva.jpg","beatrice_timida": "beatrice_timida.jpg","beatrice_paixao": "beatrice_paixao.jpg","subaru_default": "subaru_default.jpg","rem_default": "rem_default.jpg","ram_default": "ram_default.jpg","ma_tristeza": "ma_tristeza.jpg","ma_raiva": "ma_raiva.jpg","ma_timida": "ma_timida.jpg","ma_paixao": "ma_paixao.jpg","ma_seria": "ma_seria.jpg","subaru_medo": "subaru_medo.jpg","subaru_raiva": "subaru_raiva.jpg","subaru_tristeza": "subaru_tristeza.jpg","subaru_timida": "subaru_timida.jpg","subaru_paixao": "subaru_paixao.jpg","subaru_seria": "subaru_seria.jpg","rem_medo": "rem_medo.jpg","rem_raiva": "rem_raiva.jpg","rem_tristeza": "rem_tristeza.jpg","rem_timida": "rem_timida.jpg","rem_paixao": "rem_paixao.jpg","rem_seria": "rem_seria.jpg","ram_medo": "ram_medo.jpg","ram_raiva": "ram_raiva.jpg","ram_tristeza": "ram_tristeza.jpg","ram_timida": "ram_timida.jpg","ram_paixao": "ram_paixao.jpg","ram_seria": "ram_seria.jpg","romance_bandagem": "romance_bandagem.jpg","ma_default": "ma_default.jpg", "ma_medo": "ma_medo.jpg", "ma_resolve": "ma_resolve.jpg", "ma_flare": "ma_flare.jpg", "ma_asas": "ma_asas.jpg", "floresta_noturna": "floresta_noturna.jpg", "clareira_luar": "clareira_luar.jpg", "mansao_exterior": "mansao_exterior.jpg", "mansao_interior": "mansao_interior.jpg", "subaru": "subaru.jpg", "rem": "rem.jpg", "ram": "ram.jpg"};
+
+</script>
+<script>
+// ---------- scene backgrounds (real illustrations) ----------
+const sceneImageMap = {
+  forest_dark: 'floresta_noturna',
+  forest_glow: 'floresta_noturna',
+  clearing_moon: 'clareira_luar',
+  danger_flash: 'floresta_noturna',
+  mansion_far: 'mansao_exterior',
+  mansion_interior: 'mansao_interior',
+  interrogation_room: 'bg_interrogatorio_v2',
+  guest_room: 'bg_quarto_simples',
+  guest_room_dia: 'bg_quarto_dia',
+  corredor_dia: 'bg_corredor_dia',
+  jardim_fonte: 'bg_jardim_fonte',
+  biblioteca: 'bg_biblioteca',
+  cozinha: 'bg_cozinha',
+  bandagem: 'romance_bandagem'
+};
+function setScene(key, opts={}){
+  const el = document.getElementById('scene');
+  const imgKey = sceneImageMap[key] || 'floresta_noturna';
+  el.innerHTML = `<img src="${IMG[imgKey]}" alt="">`;
+  let filter = 'none';
+  if(key === 'forest_glow') filter = 'brightness(1.08) saturate(1.1) sepia(0.08)';
+  if(key === 'danger_flash') filter = opts.flash ? 'brightness(1.3) saturate(1.2) hue-rotate(-8deg)' : 'brightness(0.9)';
+  el.style.filter = filter;
+  if(opts.shake){
+    el.animate([{transform:'translateX(0)'},{transform:'translateX(-6px)'},{transform:'translateX(5px)'},{transform:'translateX(0)'}],{duration:280});
+  }
+}
+
+// ---------- Ma portrait (real illustrations) ----------
+const CHAR_MOOD_MAP = {
+  ma: { default:'ma_default', medo:'ma_medo', tristeza:'ma_tristeza', seria:'ma_seria', flare:'ma_flare', asas:'ma_asas', raiva:'ma_raiva', paixao:'ma_paixao', timida:'ma_timida' },
+  subaru: { default:'subaru_default', medo:'subaru_medo', raiva:'subaru_raiva', tristeza:'subaru_tristeza', timida:'subaru_timida', paixao:'subaru_paixao', seria:'subaru_seria' },
+  rem: { default:'rem_default', medo:'rem_medo', raiva:'rem_raiva', tristeza:'rem_tristeza', timida:'rem_timida', paixao:'rem_paixao', seria:'rem_seria' },
+  ram: { default:'ram_default', medo:'ram_medo', raiva:'ram_raiva', tristeza:'ram_tristeza', timida:'ram_timida', paixao:'ram_paixao', seria:'ram_seria' },
+  beatrice: { default:'beatrice_default', medo:'beatrice_medo', raiva:'beatrice_raiva', tristeza:'beatrice_tristeza', timida:'beatrice_timida', paixao:'beatrice_paixao', seria:'beatrice_seria' },
+  emilia: { default:'emilia_default', medo:'emilia_medo', raiva:'emilia_raiva', tristeza:'emilia_tristeza', timida:'emilia_timida', paixao:'emilia_paixao', seria:'emilia_seria' }
+};
+function renderChars(chars){
+  const wrap = document.getElementById('portrait-wrap');
+  wrap.innerHTML = '';
+  if(!chars || chars.length === 0){ wrap.className = ''; return; }
+  wrap.className = chars.length === 1 ? 'single' : 'multi';
+  chars.forEach(c=>{
+    const img = document.createElement('img');
+    img.className = 'portrait-slot';
+    const key = (CHAR_MOOD_MAP[c.id] && CHAR_MOOD_MAP[c.id][c.mood]) || CHAR_MOOD_MAP[c.id].default;
+    img.src = IMG[key];
+    if(c.mood === 'flare'){ img.style.filter = 'drop-shadow(0 0 30px rgba(193,80,46,0.65))'; }
+    wrap.appendChild(img);
+  });
+}
+
+// ---------- Story data ----------
+// each beat: {speaker, text, scene, portrait, choices?, flag?, next}
+const beats = [
+  {scene:"forest_dark", chars:[], speaker:"", text:"O cheiro chega antes de qualquer outra coisa: terra encharcada, resina, folhas apodrecendo devagar. Não é o cheiro de casa."},
+  {scene:"forest_dark", chars:[{"id":"ma","mood":"medo"}], speaker:"", text:"Ma abre os olhos. Copas altas, negras contra um céu que ela não reconhece. Nenhuma torre de vigia. Nenhum sino de caçador."},
+  {scene:"forest_dark", chars:[{"id":"ma","mood":"medo"}], speaker:"Ma", text:"(...não. Não é a minha floresta. Não tem torre de vigia. Não tem sino de caçador. Onde é que eu...)"},
+  {scene:"forest_dark", chars:[{"id":"ma","mood":"medo"}], speaker:"", text:"Ela tenta se levantar e o corpo todo protesta. As costas latejam bem onde as asas — o que restou delas — se prendem à pele."},
+  {scene:"forest_dark", chars:[{"id":"ma","mood":"medo"}], speaker:"", text:"Por puro reflexo, ela tenta abri-las. Um espasmo de dor a faz encolher. As pontas cortadas nunca esquecem."},
+  {scene:"forest_glow", chars:[{"id":"ma","mood":"asas"}], speaker:"", text:"Por um instante, mesmo assim, elas se abrem — grandes, translúcidas, quase inúteis. No mundo dela, toda Oni voa. Ela nunca mais vai saber o que isso significa."},
+  {scene:"forest_dark", chars:[{"id":"ma","mood":"tristeza"}], speaker:"Ma", text:"(Respira. Só isso. Você já fugiu antes — sabe fazer isso. Só que dessa vez não tem pra onde fugir de volta.)"},
+  {scene:"forest_dark", chars:[{"id":"ma","mood":"tristeza"}], speaker:"", text:"Mas \"antes\" ela tinha um lugar para onde fugir. Agora não sabe nem em que direção fica o norte — e a lembrança da família que não está mais em lugar nenhum aperta mais forte que qualquer machucado.",
+    choices:[
+      {label:"Ficar imóvel e escutar a floresta antes de qualquer coisa", flag:"cautelosa"},
+      {label:"Se forçar a levantar e procurar qualquer sinal de gente", flag:"iniciativa"}
+    ]},
+  {scene:"forest_glow", chars:[{"id":"ma","mood":"tristeza"}], speaker:"", text:"{cautelosa:Ela se encosta a um tronco e escuta. Grilos. Vento alto. Nada de humano, nada de familiar. Só depois de um longo minuto ela confia nas próprias pernas.}{iniciativa:Ela se força a ficar de pé antes mesmo de o tremor nas pernas passar. Ficar parada demais é o que a mataria, no mundo dela.}"},
+  {scene:"forest_dark", chars:[{"id":"ma","mood":"tristeza"}], speaker:"", text:"O primeiro dia inteiro, ela só anda em círculos pequenos — perto o bastante do lugar onde caiu pra não se perder de vez, longe o bastante pra sentir que está fazendo alguma coisa."},
+  {scene:"forest_dark", chars:[{"id":"ma","mood":"default"}], speaker:"", text:"Come o que reconhece como comível. Bebe de um riacho e reza pra não estar envenenado. Dorme encolhida entre raízes grossas, pronta pra correr ao menor som."},
+  {scene:"forest_glow", chars:[{"id":"ma","mood":"medo"}], speaker:"", text:"No que ela acha que é o segundo dia, ouve vozes. Vozes de homem, risada alta, o tilintar de metal contra metal."},
+  {scene:"forest_glow", chars:[{"id":"ma","mood":"medo"}], speaker:"Ma", text:"(Caçadores. Tem que ser. Até aqui.)"},
+  {scene:"forest_glow", chars:[], speaker:"", text:"Ela não pensa duas vezes. O corpo decide antes da cabeça: desaparece atrás do tronco mais largo que encontra, prende a respiração, e o mundo encolhe até virar só aquele som se aproximando.",
+    choices:[
+      {label:"Ficar completamente imóvel até eles passarem", flag:"medo"},
+      {label:"Recuar mais fundo na mata, mesmo arriscando fazer barulho", flag:"firmeza"}
+    ]},
+  {scene:"forest_glow", chars:[{"id":"ma","mood":"medo"}], speaker:"", text:"{medo:Ela vira pedra. Nem os olhos se movem. As vozes passam a poucos metros — homens rindo de alguma piada que ela não entende — e somem estrada afora.}{firmeza:Ela se afasta em passos pequenos, testando cada raiz antes de confiar o peso do corpo nela. As vozes ficam pra trás, mais fracas a cada passo.}"},
+  {scene:"forest_glow", chars:[{"id":"ma","mood":"tristeza"}], speaker:"", text:"Não eram caçadores atrás dela. Só viajantes, ou lenhadores, seguindo a própria vida. Isso não muda o tanto que o coração ainda dispara, nem o gosto de metal que fica na boca por horas."},
+  {scene:"forest_dark", chars:[{"id":"ma","mood":"medo"}], speaker:"", text:"Mais tarde — ela não sabe dizer quanto tempo depois — o pé escorrega numa raiz molhada. A dor sobe pela perna toda. E então:"},
+  {scene:"forest_glow", chars:[{"id":"ma","mood":"medo"}], speaker:"", text:"É manhã de novo. A mesma manhã. As mesmas vozes de homem ecoando ao longe, quase palavra por palavra do jeito que ela lembra."},
+  {scene:"forest_glow", chars:[{"id":"ma","mood":"medo"}], speaker:"Ma", text:"(Isso já... eu já ouvi isso. Essa risada. Essa exata risada.)"},
+  {scene:"forest_dark", chars:[{"id":"ma","mood":"tristeza"}], speaker:"", text:"Perde a conta de quantas vezes o mesmo amanhecer parece se repetir. Às vezes um detalhe muda — um pássaro que não estava ali antes, uma pedra fora do lugar — mas o resto é sempre igual demais pra ser coincidência."},
+  {scene:"forest_dark", chars:[{"id":"ma","mood":"medo"}], speaker:"Ma", text:"(Eu estou enlouquecendo. Ou o mundo está. Uma das duas coisas.)"},
+  {scene:"forest_glow", chars:[{"id":"ma","mood":"default"}], speaker:"", text:"Até que, numa manhã, alguma coisa é diferente de verdade — não sabe dizer o quê, só sente o ar parar de se repetir. Ela não tem como saber que, muito longe dali, numa capital que nunca vai ver, um garoto acabou de sobreviver ao dia que vinha matando ele de novo e de novo. Mas sente, de algum jeito impossível de explicar, um peso sumir dos próprios ombros."},
+  {scene:"forest_glow", chars:[{"id":"ma","mood":"tristeza"}], speaker:"", text:"O tempo, finalmente, começa a andar pra frente de verdade."},
+  {scene:"forest_glow", chars:[{"id":"ma","mood":"default"}], speaker:"", text:"Ao longe, entre os troncos, uma claridade morna. Não é lua. É fogo — tocheiras, várias, alinhadas como se guardassem um caminho."},
+  {scene:"mansion_far", chars:[{"id":"ma","mood":"default"}], speaker:"Ma", text:"(Gente. Tem gente ali.)"},
+  {scene:"mansion_far", chars:[{"id":"ma","mood":"medo"}], speaker:"", text:"O impulso de correr até a luz dura meio segundo — e morre no mesmo instante. E se forem como os outros? E se, ao te verem, a primeira coisa que notarem forem os chifres?"},
+  {scene:"mansion_far", chars:[{"id":"ma","mood":"medo"}], speaker:"", text:"Ela se abaixa atrás de um arbusto denso, longe o bastante para não ser vista, perto o bastante para observar. Um portão de ferro. Uma casa grande, quase um pequeno castelo, recortada contra o céu."},
+  {scene:"mansion_arrival", chars:[{"id":"ma","mood":"default"}], speaker:"", text:"Uma carruagem se aproxima pelo caminho principal, rápida demais para ser visita de cortesia. Ainda longe, dá pra ouvir uma voz de mulher, tensa, gritando por alguém antes mesmo das rodas pararem."},
+  {scene:"mansion_arrival", chars:[{"id":"ma","mood":"medo"}], speaker:"Ma", text:"(Alguma coisa está errada.)"},
+  {scene:"mansion_arrival", chars:[{"id":"ma","mood":"medo"}], speaker:"", text:"Portas se abrem. Tochas se movem rápido demais, gente correndo em vez de andando. No meio da confusão, alguém é carregado para dentro — um corpo mole, um braço pendurado do jeito errado. Vivo, mas por pouco."},
+  {scene:"mansion_arrival", chars:[{"id":"ma","mood":"default"}], speaker:"Ma", text:"(...ele também não é daqui. Eu não sei como eu sei disso. Mas sei.)"},
+  {scene:"mansion_arrival", chars:[{"id":"ma","mood":"tristeza"}], speaker:"", text:"Ela não sabe o nome dele. Não vai saber por um bom tempo. Só sabe que, de algum jeito impossível de explicar, os dois atravessaram para o mesmo mundo — e que ele pode não sobreviver à primeira noite nele."},
+  {scene:"mansion_far", chars:[{"id":"ma","mood":"tristeza"}], speaker:"Ma", text:"(Eu devia ir até lá. Pedir ajuda. Só que...)"},
+  {scene:"mansion_far", chars:[{"id":"ma","mood":"medo"}], speaker:"", text:"...e se demonstrarem o mesmo tipo de medo, ou pior, o mesmo tipo de ódio que a fez fugir da própria casa? Ela recua um passo. As pernas escolhem por ela: ficar na escuridão é mais seguro do que arriscar a luz."},
+  {scene:"forest_dark", chars:[{"id":"ma","mood":"medo"}], speaker:"", text:"Um galho estala. Não sob os próprios pés."},
+  {scene:"danger_flash", chars:[{"id":"ma","mood":"medo"}], speaker:"", text:"Alguma coisa se move entre as árvores — baixa, rápida, silenciosa demais para ser gente. Dois pontos que brilham fraco na escuridão. Olhos.",
+    choices:[
+      {label:"Congelar e prender a respiração", flag:"medo+"},
+      {label:"Recuar devagar, sem tirar os olhos da sombra", flag:"firmeza+"}
+    ]},
+  {scene:"danger_flash", chars:[{"id":"ma","mood":"medo"}], speaker:"", text:"{medo+:O coração dispara tão alto que ela tem certeza de que aquilo, seja lá o que for, consegue ouvi-lo.}{firmeza+:Ela recua um passo de cada vez, testando o chão antes de confiar o peso do corpo nele.}"},
+  {scene:"danger_flash", chars:[{"id":"ma","mood":"medo"}], speaker:"", text:"Os olhos piscam — e desaparecem. Só o vento, de novo. Só a respiração dela, alta demais no silêncio."},
+  {scene:"forest_glow", chars:[{"id":"ma","mood":"tristeza"}], speaker:"Ma", text:"(Só um bicho. Só isso. Respira.)"},
+  {scene:"forest_glow", chars:[{"id":"ma","mood":"default"}], speaker:"", text:"Ela não vê a outra sombra — mais alta, mais deliberada — que se aproxima pelas suas costas, leve como quem já patrulha esse mesmo trecho de floresta todas as noites."},
+  {scene:"clearing_moon", chars:[{"id":"rem","mood":"medo"}], speaker:"???", text:"— Não se mexa."},
+  {scene:"clearing_moon", chars:[{"id":"ma","mood":"medo"},{"id":"rem","mood":"medo"}], speaker:"", text:"A voz é de mulher, calma de um jeito que assusta mais do que gritaria. Ma se vira devagar, mãos erguidas, e o luar cai cheio sobre o rosto dela — e sobre os dois chifres que ela nunca conseguiu esconder de ninguém."},
+  {scene:"clearing_moon", chars:[{"id":"rem","mood":"medo"}], speaker:"???", text:"— ...Chifres."},
+  {scene:"clearing_moon", chars:[{"id":"ma","mood":"medo"},{"id":"rem","mood":"seria"}], speaker:"", text:"A figura à frente dela tem só um — curvo, pequeno, quase escondido pelo cabelo, onde deveria haver o par inteiro. A mão que segura a arma treme, só um pouco, e por uma fração de segundo alguma coisa atravessa aquele rosto que não é desconfiança. É mais parecido com ver um fantasma. Some rápido demais pra Ma ter certeza de que viu."},
+  {scene:"clearing_moon", chars:[{"id":"ma","mood":"medo"}], speaker:"Ma", text:"(Outra Oni. Aqui. Isso... isso muda tudo. Ou vai acabar comigo antes mesmo de eu entender onde estou.)"},
+  {scene:"clearing_moon", chars:[], speaker:"", text:"— Capítulo 2: Chifre na Escuridão —"},
+  {scene:"clearing_moon", chars:[{"id":"rem","mood":"medo"}], speaker:"", text:"A arma na mão dela — uma maça curta, cravejada — não baixa nem um centímetro. Mas os dedos em volta do cabo tremem, só um pouco, do jeito que mãos treinadas não deveriam tremer."},
+  {scene:"clearing_moon", chars:[{"id":"rem","mood":"medo"}], speaker:"Rem", text:"— De onde você... não. Isso não importa agora. De onde."},
+  {scene:"clearing_moon", chars:[{"id":"ma","mood":"medo"}], speaker:"Ma", text:"(Só um chifre. As Onis do meu mundo sempre têm os dois — todas, sem exceção. O que aconteceu com o dela?)"},
+  {scene:"clearing_moon", chars:[{"id":"ma","mood":"medo"}], speaker:"Ma", text:"— Eu... eu não sei explicar. Eu mesma não sei onde estou. Eu não vim pra fazer mal a ninguém, eu juro."},
+  {scene:"clearing_moon", chars:[{"id":"rem","mood":"seria"}], speaker:"Rem", text:"— Onis com os dois chifres intactos não existem. Não deveriam existir. Então ou você é alguma ilusão, ou é alguma coisa pior."},
+  {scene:"clearing_moon", chars:[{"id":"ma","mood":"medo"},{"id":"rem","mood":"seria"}], speaker:"", text:"Ela não abaixa a arma, mas para de se aproximar. Encara os chifres de Ma como quem encara uma coisa que não deveria estar viva — luto e desconfiança brigando no mesmo rosto."},
+  {scene:"clearing_moon", chars:[{"id":"ma","mood":"medo"},{"id":"rem","mood":"seria"}], speaker:"", text:"A frase sai seca, ensaiada de tanto ser pensada antes. Por trás da calma, alguma coisa antiga se move nos olhos dela — não é só desconfiança de guarda. É mais fundo que isso.",
+    choices:[
+      {label:"Erguer as mãos e recuar mais um passo", flag:"cautelosa"},
+      {label:"Segurar o olhar dela, mesmo tremendo", flag:"firmeza"}
+    ]},
+  {scene:"clearing_moon", chars:[{"id":"ma","mood":"medo"}], speaker:"", text:"{cautelosa:Ma ergue as duas mãos, abertas, e recua um passo, encolhendo os ombros de propósito: parecer pequena é mais seguro do que parecer forte agora.}{firmeza:Ma não recua. As pernas tremem, mas ela mantém os olhos nos dela. Se vai morrer aqui, não vai ser encolhida.}"},
+  {scene:"clearing_moon", chars:[{"id":"rem","mood":"seria"}], speaker:"Rem", text:"— ...Você vem comigo. Vou decidir o que fazer com você lá dentro. Não aqui, sozinha comigo, no escuro."},
+  {scene:"clearing_moon", chars:[{"id":"rem","mood":"tristeza"}], speaker:"", text:"Soa mais a hábito do que a gentileza — alguém que aprendeu, do pior jeito possível, a nunca resolver as coisas sozinha no escuro."},
+  {scene:"mansion_far", chars:[{"id":"ma","mood":"medo"},{"id":"rem","mood":"seria"}], speaker:"", text:"Elas caminham em silêncio até o portão de ferro. Rem três passos atrás, a maça nunca guardada, os olhos nunca saindo das costas de Ma."},
+  {scene:"mansion_far", chars:[{"id":"ram","mood":"medo"}], speaker:"Ram", text:"— ...Isso é algum tipo de piada."},
+  {scene:"mansion_far", chars:[{"id":"ram","mood":"medo"}], speaker:"", text:"Ram não se move da sacada por um segundo longo demais — a primeira vez, desde que Ma a viu, que ela parece qualquer coisa além de fria."},
+  {scene:"mansion_far", chars:[{"id":"ram","mood":"default"}], speaker:"", text:"A voz vem de cima, do parapeito de uma sacada. Cabelo rosa, nenhum chifre — só a pele lisa onde um dia devia haver um, e um risco fino de cicatriz velha demais pra ver àquela distância."},
+  {scene:"mansion_far", chars:[{"id":"rem","mood":"seria"}], speaker:"Rem", text:"— Ela tem os dois, Ram. Não brinco com uma coisa dessas. Vou interrogar antes de decidir qualquer coisa."},
+  {scene:"mansion_far", chars:[{"id":"ram","mood":"raiva"}], speaker:"Ram", text:"— Então interroga rápido. E se ela mentir, é minha conta de novo — sou eu que limpo a bagunça, como sempre."},
+  {scene:"mansion_far", chars:[{"id":"rem","mood":"tristeza"}], speaker:"", text:"Ram desaparece da sacada tão de repente quanto apareceu. Rem suspira baixo — o primeiro sinal de cansaço que Ma vê nela até agora."},
+  {scene:"mansion_interior", chars:[], speaker:"", text:"Dentro, o calor das lareiras é quase um choque depois do frio da floresta. Mas o calor não é a única coisa no ar — tem gente correndo, vozes altas demais pra hora, o cheiro de remédio se misturando ao de cera de vela."},
+  {scene:"mansion_interior", chars:[], speaker:"", text:"\"Preciso de panos limpos, agora!\" — a voz vem de algum lugar no andar de cima, cortada, urgente. Uma voz de mulher que Ma nunca ouviu antes."},
+  {scene:"mansion_interior", chars:[{"id":"rem","mood":"tristeza"}], speaker:"", text:"A mandíbula de Rem se fecha. Por um segundo ela parece prestes a subir correndo — e Ma entende, sem que ninguém precise dizer, que há coisa mais grave acontecendo nessa casa essa noite do que uma oni perdida na floresta."},
+  {scene:"mansion_interior", chars:[{"id":"rem","mood":"tristeza"}], speaker:"Rem", text:"— Não escolhi a melhor noite pra isso, viu."},
+  {scene:"mansion_interior", chars:[], speaker:"", text:"No topo da escada, por menos de dois segundos, uma garota pequena aparece — cabelo claro, olhar velho demais pro corpo, um livro grosso apertado contra o peito. Ela encara Ma sem piscar, sem dizer nada, e desaparece de volta pelo corredor antes que Ma consiga entender o que viu."},
+  {scene:"mansion_interior", chars:[{"id":"ma","mood":"medo"}], speaker:"Ma", text:"(...essa casa tem mais segredo do que gente.)"},
+  {scene:"mansion_interior", chars:[{"id":"rem","mood":"seria"}], speaker:"Rem", text:"— Vem. Não tenho a noite toda."},
+  {scene:"interrogation_room", chars:[], speaker:"", text:"A sala onde entram é pequena, só uma mesa e duas cadeiras, uma vela. Rem se senta de um lado. Aponta a cadeira vazia do outro."},
+  {scene:"interrogation_room", chars:[{"id":"rem","mood":"seria"}], speaker:"Rem", text:"— Nome."},
+  {scene:"interrogation_room", chars:[{"id":"rem","mood":"seria"}], speaker:"", text:"Ela quase pergunta outra coisa — algo sobre aldeias, sobre sobreviventes, algo que treme na ponta da língua antes de ser engolido de volta. Quando fala de novo, a voz está fechada como porta trancada."},
+  {scene:"interrogation_room", chars:[{"id":"ma","mood":"medo"}], speaker:"Ma", text:"— Ma."},
+  {scene:"interrogation_room", chars:[{"id":"rem","mood":"seria"}], speaker:"Rem", text:"— De onde você é, Ma. De verdade dessa vez."},
+  {scene:"interrogation_room", chars:[{"id":"rem","mood":"medo"}], speaker:"", text:"Rem se inclina para frente — e para. O nariz franze, de leve, como quem sente um cheiro que não devia estar ali."},
+  {scene:"interrogation_room", chars:[{"id":"rem","mood":"medo"}], speaker:"Rem", text:"— ...Você cheira a alguma coisa que eu não deveria reconhecer. Não é cheiro de Oni. É outra coisa."},
+  {scene:"interrogation_room", chars:[{"id":"ma","mood":"medo"}], speaker:"", text:"O coração de Ma acelera. Ela não faz ideia do que Rem está sentindo — mas sabe, no fundo, que tem a ver com a mesma coisa que a trouxe para esse mundo, no mesmo instante que o garoto do corredor.",
+    choices:[
+      {label:"Contar a verdade: perdeu a família, fugiu, não sabe de mais nada", flag:"confianca"},
+      {label:"Ficar na defensiva e não contar quase nada", flag:"guardada"}
+    ]},
+  {scene:"interrogation_room", chars:[{"id":"ma","mood":"tristeza"}], speaker:"", text:"{confianca:Ma conta — a voz falhando em alguns pontos, mas sem parar. A família que não existe mais. A fuga pela floresta que virou fuga entre mundos. Falar em voz alta dói mais do que ela esperava.}{guardada:Ma cruza os braços e olha pra mesa. \"Isso é tudo que eu tenho pra dizer\" — mesmo sendo mentira, e mesmo sabendo que provavelmente não engana ninguém.}"},
+  {scene:"interrogation_room", chars:[{"id":"rem","mood":"tristeza"}], speaker:"Rem", text:"— {confianca:...Está bem.}{guardada:Tudo bem. Não vou forçar.} Vou falar com Roswaal-sama de manhã. Até lá, você fica aqui."},
+  {scene:"bandagem", chars:[], speaker:"", text:"Rem nota o corte no dorso da mão de Ma — raso, esquecido em meio a tanta coisa pior. Sem perguntar, pega uma atadura da gaveta e senta de volta."},
+  {scene:"bandagem", chars:[], speaker:"Rem", text:"— Fica quieta. Ferida suja em oni infecta rápido, e eu não quero explicar pro Roswaal-sama por que deixei você apodrecer na cela. Não confunda isso com gentileza."},
+  {scene:"bandagem", chars:[], speaker:"", text:"As mãos dela são rápidas, precisas — mãos que já fizeram isso centenas de vezes, em ferimentos bem piores que esse. Nenhuma das duas olha pro rosto da outra. É mais fácil assim."},
+  {scene:"bandagem", chars:[], speaker:"Ma", text:"— ...Obrigada."},
+  {scene:"bandagem", chars:[], speaker:"Rem", text:"— Não agradeça ainda. Amanhã eu ainda posso decidir que você é perigosa."},
+  {scene:"guest_room", chars:[{"id":"rem","mood":"default"}], speaker:"", text:"Ela se levanta, vai até a porta — e para, de costas, por tempo demais para ser só coincidência."},
+  {scene:"guest_room", chars:[{"id":"rem","mood":"tristeza"}], speaker:"Rem", text:"— ...Tem cobertores no baú, se sentir frio. {confianca:Sinto muito. Pela sua família.}{guardada:E tranque a porta por dentro. Por segurança sua, não minha.}"},
+  {scene:"guest_room", chars:[], speaker:"", text:"Ela hesita mais um segundo antes de sair — o suficiente pra Ma notar. Não chega a ser um sorriso. Mas também não é mais só desconfiança.", requiresFlag:"confianca"},
+  {scene:"guest_room", chars:[{"id":"ma","mood":"tristeza"}], speaker:"", text:"A porta se fecha. Passos se afastam pelo corredor. Ma fica sozinha, numa cama que não é dela, num mundo que não é dela, ao lado de uma mulher que a mediu como ameaça e mesmo assim deixou cobertores."},
+  {scene:"forest_glow", chars:[], speaker:"", text:"Lá fora, bem longe da mansão, alguma coisa se arrasta entre as árvores em direção às luzes — devagar, paciente, do jeito que só coisas que não precisam ter pressa se movem."},
+  {scene:"forest_glow", chars:[{"id":"ma","mood":"medo"}], speaker:"Ma", text:"(Alguma coisa está vindo. Eu não sei como eu sei disso. Mas eu sei.)"},
+  {scene:"guest_room_dia", chars:[], speaker:"", text:"— Capítulo 3: A Casa que Não Dorme —"},
+  {scene:"guest_room_dia", chars:[], speaker:"", text:"A luz que entra pela janela é cinza e fraca — nem manhã de verdade ainda. O que quer que estivesse se arrastando lá fora na noite passada se calou antes do amanhecer, sem explicação, do mesmo jeito que chegou."},
+  {scene:"guest_room_dia", chars:[{"id":"ma","mood":"tristeza"}], speaker:"Ma", text:"(Não dormi nada. Mas pelo menos ainda estou aqui.)"},
+  {scene:"guest_room_dia", chars:[{"id":"rem","mood":"default"}], speaker:"", text:"Três batidas secas na porta. Rem entra sem esperar resposta, uma bandeja simples nas mãos — pão, água, nada além disso. Os olhos dela fazem o mesmo inventário de sempre: mãos, chifres, distância."},
+  {scene:"guest_room_dia", chars:[{"id":"rem","mood":"default"}], speaker:"Rem", text:"— Coma. Depois fica aqui até eu voltar. Isso não é negociável."},
+  {scene:"guest_room_dia", chars:[{"id":"ma","mood":"default"}], speaker:"", text:"A porta se fecha de novo. Ma olha pro pão como se ele pudesse ser um teste — mas o estômago vence a desconfiança rápido demais."},
+  {scene:"corredor_dia", chars:[], speaker:"", text:"Rem não volta em cinco minutos. Nem em uma hora. Quando o sol já está alto o bastante pra empurrar luz de verdade pelas frestas da porta, Ma arrisca abrir ela mesma."},
+  {scene:"corredor_dia", chars:[{"id":"ma","mood":"default"}], speaker:"", text:"O corredor de dia é outro mundo — piso claro, janelas altas, luz demais pra qualquer coisa parecer ameaçadora. Ainda assim ela anda rente à parede, pronta pra sumir ao primeiro sinal de gente."},
+  {scene:"corredor_dia", chars:[{"id":"ram","mood":"raiva"}], speaker:"Ram", text:"— Se procura a saída, é a direção errada."},
+  {scene:"corredor_dia", chars:[{"id":"ram","mood":"default"}], speaker:"", text:"Ram carrega um cesto de roupa dobrada quase maior que ela mesma, e nem diminui o passo. Não é hostilidade de verdade — é o mesmo tom afiado que parece reservado pra todo mundo, o tempo todo."},
+  {scene:"corredor_dia", chars:[{"id":"ma","mood":"timida"}], speaker:"Ma", text:"— Eu só... estava procurando alguma coisa pra fazer. Não gosto de ficar parada."},
+  {scene:"corredor_dia", chars:[{"id":"ram","mood":"seria"}], speaker:"Ram", text:"— Estranho. A maioria dos hóspedes prefere ficar bem quietinha, esperando não ser jogada de volta pra floresta."},
+  {scene:"jardim_fonte", chars:[], speaker:"", text:"Antes que Ma consiga responder, uma voz nova corta o corredor — mais leve, mais cansada, vindo de uma porta que dá pro jardim."},
+  {scene:"jardim_fonte", chars:[{"id":"ma","mood":"medo"},{"id":"emilia","mood":"default"}], speaker:"", text:"Uma mulher se aproxima devagar, cabelo prateado solto, olheiras fundas de quem não dorme direito há dias. Ela é humana o bastante, aos olhos de Ma, pra fazer o corpo inteiro travar antes que a cabeça mande."},
+  {scene:"jardim_fonte", chars:[{"id":"ma","mood":"medo"}], speaker:"Ma", text:"(Não. Não, não, não —)"},
+  {scene:"jardim_fonte", chars:[{"id":"ma","mood":"medo"}], speaker:"", text:"Ela recua um passo inteiro antes de perceber que fez isso. O coração dispara do mesmo jeito que disparava toda vez que via um caçador no mundo dela — o corpo não sabe a diferença entre \"ameaça de verdade\" e \"só parece uma\"."},
+  {scene:"jardim_fonte", chars:[{"id":"ma","mood":"medo"},{"id":"emilia","mood":"timida"}], speaker:"???", text:"— Ah — desculpa, eu não quis assustar você."},
+  {scene:"jardim_fonte", chars:[{"id":"ma","mood":"medo"},{"id":"emilia","mood":"default"}], speaker:"", text:"A mulher para no lugar, as duas mãos abertas e visíveis, num gesto pequeno e imediato que Rem nunca fez. Não se aproxima mais um centímetro."},
+  {scene:"jardim_fonte", chars:[{"id":"ma","mood":"medo"},{"id":"emilia","mood":"default"}], speaker:"???", text:"— Meu nome é Emilia. Você deve ser a hóspede que a Rem mencionou. Posso ficar aqui, só assim, se for mais fácil."},
+  {scene:"jardim_fonte", chars:[{"id":"ma","mood":"tristeza"}], speaker:"", text:"Ninguém, em nenhum dos dois mundos, tinha perguntado antes o que seria \"mais fácil\" pra Ma.",
+    choices:[
+      {label:"Se forçar a não recuar mais nenhum passo", flag:"firmeza"},
+      {label:"Manter a distância, educada mas guardada", flag:"medo"}
+    ]},
+  {scene:"jardim_fonte", chars:[{"id":"ma","mood":"default"}], speaker:"", text:"{firmeza:Ma crava os pés no lugar, força os ombros a relaxar um grau. Não é coragem de verdade — é só recusar deixar o medo escolher por ela, dessa vez.}{medo:Ma não se aproxima, mas também não foge. Fica ali, a distância seguindo sendo dela, e isso já é mais do que ela esperava conseguir.}"},
+  {scene:"jardim_fonte", chars:[{"id":"ma","mood":"default"},{"id":"ram","mood":"default"}], speaker:"", text:"Ram observa a cena um segundo a mais do que precisava, e some corredor adentro sem dizer nada — o que, vindo dela, quase parece deixar o momento acontecer de propósito."},
+  {scene:"jardim_fonte", chars:[{"id":"ma","mood":"default"},{"id":"emilia","mood":"paixao"}], speaker:"Emilia", text:"— Você não precisa explicar nada, se não quiser. Eu também não sou daqui, no fim das contas. Não desse jeito que as pessoas pensam que sou."},
+  {scene:"jardim_fonte", chars:[{"id":"ma","mood":"tristeza"}], speaker:"Ma", text:"(Ela também carrega alguma coisa. Dá pra ver nos olhos — só não sei o quê ainda.)"},
+  {scene:"jardim_fonte", chars:[{"id":"ma","mood":"default"},{"id":"emilia","mood":"default"}], speaker:"Emilia", text:"— Fica à vontade no jardim, se quiser. Ninguém vai incomodar você aqui."},
+  {scene:"jardim_fonte", chars:[], speaker:"", text:"Ela se afasta do mesmo jeito devagar que chegou, como quem já aprendeu, em algum momento da própria vida, que assustar alguém duas vezes é imperdoável."},
+  {scene:"biblioteca", chars:[], speaker:"", text:"Mais tarde, tentando se orientar pelos corredores, Ma passa por uma porta entreaberta — e para. Do outro lado, fileiras de estante sobem até um teto que ela não consegue enxergar direito."},
+  {scene:"biblioteca", chars:[{"id":"beatrice","mood":"raiva"}], speaker:"???", text:"— Quem deixou essa porta aberta."},
+  {scene:"biblioteca", chars:[{"id":"beatrice","mood":"raiva"}], speaker:"", text:"Uma garota pequena, cabelo claro em cachos apertados, encara Ma do alto de uma poltrona grande demais pra ela — livro fechado com força no colo, como se Ma tivesse interrompido algo importante só por existir ali perto."},
+  {scene:"biblioteca", chars:[{"id":"beatrice","mood":"raiva"}], speaker:"???", text:"— Essa área não é pra visita, suponho. Vai embora antes que eu conte até três."},
+  {scene:"biblioteca", chars:[], speaker:"", text:"A porta bate sozinha — ou quase sozinha — antes que Ma consiga responder qualquer coisa. Fica só o eco, e a certeza estranha de que aquela garota não tem nada de garota comum."},
+  {scene:"cozinha", chars:[{"id":"rem","mood":"default"}], speaker:"Rem", text:"— Aí está você. Já ia mandar a Ram te procurar, e ela não ia ficar feliz com isso."},
+  {scene:"cozinha", chars:[{"id":"rem","mood":"default"}], speaker:"", text:"Rem finalmente reaparece, mangas arregaçadas, um pouco de farinha no pulso. A cozinha ao redor dela cheira a pão fresco — o primeiro cheiro do dia que não é medo."},
+  {scene:"cozinha", chars:[{"id":"ma","mood":"timida"}], speaker:"Ma", text:"— Eu posso ajudar. Com isso, com qualquer coisa. Sei organizar bem — era o que eu fazia, no meu mundo."},
+  {scene:"cozinha", chars:[{"id":"rem","mood":"seria"}], speaker:"Rem", text:"— Você ainda é uma desconhecida com dois chifres que não deveriam existir. Ajudar não é a mesma coisa que ser perdoada."},
+  {scene:"cozinha", chars:[{"id":"rem","mood":"tristeza"}], speaker:"Rem", text:"— Mas... pode descascar isso aqui. Se quiser."},
+  {scene:"cozinha", chars:[{"id":"ma","mood":"default"},{"id":"rem","mood":"default"}], speaker:"", text:"Não é bem confiança, ainda — mas é a menor porta que alguém já abriu pra ela em qualquer um dos dois mundos, e Ma atravessa antes que feche de novo."},
+  {scene:"guest_room", chars:[{"id":"ma","mood":"tristeza"}], speaker:"", text:"À noite, sozinha de novo, Ma pensa na mulher do jardim — no jeito que ela recuou primeiro, sem ser pedida. Não é a mesma coisa que confiar em alguém. Mas é o começo de lembrar como isso se sentia.", requiresFlag:"firmeza"},
+  {scene:"guest_room", chars:[{"id":"ma","mood":"tristeza"}], speaker:"Ma", text:"(O garoto que eu vi chegando naquela noite. Ninguém fala o nome dele. Será que ele ainda...)"},
+  {scene:"guest_room", chars:[], speaker:"", text:"Em algum quarto dessa mesma casa, sem que ela saiba, um coração continua batendo devagar demais pro gosto de qualquer um. Amanhã, talvez, ele finalmente abra os olhos."}
+];
+
+const flags = { cautelosa:0, iniciativa:0, medo:0, firmeza:0, confianca:0, guardada:0 };
+
+function applyFlagText(text){
+  return text.replace(/\{([^:}]+):([^}]*)\}\{([^:}]+):([^}]*)\}/g, (m,f1,t1,f2,t2)=>{
+    if(f1.replace('+','') in flags || f1 in flags){
+      return flags[f1.replace('+','')] >= flags[f2.replace('+','')] ? t1 : t2;
+    }
+    return t1;
+  });
+}
+
+let idx = 0;
+let history = [];
+const speakerEl = document.getElementById('speaker');
+const textEl = document.getElementById('text');
+const choicesEl = document.getElementById('choices');
+const tapHint = document.getElementById('tap-hint');
+const catcher = document.getElementById('click-catcher');
+
+function updateDots(){
+  const fearDots = document.getElementById('fear-dots');
+  const resolveDots = document.getElementById('resolve-dots');
+  fearDots.innerHTML=''; resolveDots.innerHTML='';
+  for(let i=0;i<5;i++){
+    const d1=document.createElement('div'); d1.className='dot'+(i<flags.medo?' on-fear':'');
+    fearDots.appendChild(d1);
+    const d2=document.createElement('div'); d2.className='dot'+(i<flags.firmeza?' on-resolve':'');
+    resolveDots.appendChild(d2);
+  }
+}
+
+function render(){
+  while(beats[idx] && beats[idx].requiresFlag && !flags[beats[idx].requiresFlag]){
+    idx = idx + 1;
+  }
+  const b = beats[idx];
+  if(!b){ showEnd(); return; }
+  setScene(b.scene, {flash: b.scene==='danger_flash'});
+  renderChars(b.chars);
+  speakerEl.textContent = b.speaker || '';
+  speakerEl.style.display = b.speaker ? 'inline-block' : 'none';
+  textEl.textContent = applyFlagText(b.text);
+  choicesEl.innerHTML = '';
+  if(b.choices){
+    choicesEl.classList.add('show');
+    tapHint.style.display = 'none';
+    b.choices.forEach(c=>{
+      const btn = document.createElement('button');
+      btn.className = 'choice-btn';
+      btn.textContent = c.label;
+      btn.onclick = (e)=>{
+        e.stopPropagation();
+        if(c.flag){
+          const key = c.flag.replace('+','');
+          flags[key] = (flags[key]||0) + 1;
+        }
+        updateDots();
+        idx = idx + 1;
+        render();
+        save();
+      };
+      choicesEl.appendChild(btn);
+    });
+  } else {
+    choicesEl.classList.remove('show');
+    tapHint.style.display = 'block';
+  }
+}
+
+function advance(){
+  const b = beats[idx];
+  if(b && b.choices) return;
+  history.push(idx);
+  idx++;
+  render();
+  save();
+}
+
+function goBack(){
+  if(history.length === 0) return;
+  idx = history.pop();
+  render();
+}
+
+catcher.addEventListener('click', advance);
+
+document.getElementById('nav-back').addEventListener('click', (e)=>{ e.stopPropagation(); goBack(); });
+document.getElementById('nav-forward').addEventListener('click', (e)=>{ e.stopPropagation(); advance(); });
+document.getElementById('nav-chapters-btn').addEventListener('click', (e)=>{
+  e.stopPropagation();
+  document.getElementById('nav-chapters-menu').classList.toggle('show');
+});
+document.querySelectorAll('.chapter-jump-btn').forEach(btn=>{
+  btn.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    idx = parseInt(btn.getAttribute('data-idx'), 10);
+    history = [];
+    render();
+    save();
+    document.getElementById('nav-chapters-menu').classList.remove('show');
+  });
+});
+
+function showEnd(){
+  document.getElementById('end-card').classList.add('show');
+}
+
+async function save(){
+  try{
+    await window.storage.set('rezero_ma_progress_completo', JSON.stringify({idx, flags}), false);
+  }catch(e){ /* segue sem salvar se falhar */ }
+}
+async function tryResume(){
+  // tenta herdar as flags do capítulo 1, se existirem
+  try{
+    const r1 = await window.storage.get('rezero_ma_progress', false);
+    if(r1 && r1.value){
+      const d1 = JSON.parse(r1.value);
+      Object.assign(flags, d1.flags||{});
+    }
+  }catch(e){ /* sem progresso do capítulo 1 salvo neste dispositivo */ }
+  try{
+    const r2 = await window.storage.get('rezero_ma_progress_ch2', false);
+    if(r2 && r2.value){
+      const d2 = JSON.parse(r2.value);
+      Object.assign(flags, d2.flags||{});
+    }
+  }catch(e){ /* sem progresso do capítulo 2 salvo neste dispositivo */ }
+  try{
+    const r = await window.storage.get('rezero_ma_progress_completo', false);
+    if(r && r.value){
+      const data = JSON.parse(r.value);
+      if(typeof data.idx === 'number' && data.idx < beats.length){
+        idx = data.idx;
+        Object.assign(flags, data.flags||{});
+      }
+    }
+  }catch(e){ /* sem progresso salvo ainda deste capítulo */ }
+}
+
+const ASSET_CATALOG = {
+  personagens: [
+    {n:1, arquivo:"ma_default.jpg", personagem:"Ma", tipo:"Rosto", outfit:"Roupa de viagem/capa", sentimento:"Neutra, cautelosa", intimidade:0, restricao:"Nenhuma — retrato padrão"},
+    {n:2, arquivo:"ma_medo.jpg", personagem:"Ma", tipo:"Rosto", outfit:"Roupa de viagem/capa", sentimento:"Medo", intimidade:0, restricao:"Nenhuma"},
+    {n:3, arquivo:"ma_tristeza.jpg", personagem:"Ma", tipo:"Rosto", outfit:"Roupa de viagem/capa", sentimento:"Tristeza", intimidade:0, restricao:"Nenhuma"},
+    {n:4, arquivo:"ma_timida.jpg", personagem:"Ma", tipo:"Rosto", outfit:"Roupa de viagem/capa", sentimento:"Tímida", intimidade:1, restricao:"Nenhuma"},
+    {n:5, arquivo:"ma_asas.jpg", personagem:"Ma", tipo:"Corpo", outfit:"Roupa de viagem/capa", sentimento:"Vulnerável (asas visíveis)", intimidade:1, restricao:"Cenas onde ela se revela fisicamente"},
+    {n:6, arquivo:"rem_default.jpg", personagem:"Rem", tipo:"Rosto", outfit:"Uniforme de empregada", sentimento:"Neutra, formal", intimidade:0, restricao:"Nenhuma"},
+    {n:7, arquivo:"rem_medo.jpg", personagem:"Rem", tipo:"Rosto", outfit:"Uniforme de empregada", sentimento:"Medo/alerta", intimidade:0, restricao:"Nenhuma"},
+    {n:8, arquivo:"rem_seria.jpg", personagem:"Rem", tipo:"Rosto", outfit:"Uniforme de empregada", sentimento:"Séria, escrutinando", intimidade:0, restricao:"Nenhuma"},
+    {n:9, arquivo:"rem_tristeza.jpg", personagem:"Rem", tipo:"Rosto", outfit:"Uniforme de empregada", sentimento:"Tristeza contida", intimidade:1, restricao:"Nenhuma"},
+    {n:10, arquivo:"ram_default.jpg", personagem:"Ram", tipo:"Rosto", outfit:"Uniforme de empregada", sentimento:"Neutra, seca", intimidade:0, restricao:"Nenhuma"},
+    {n:11, arquivo:"ram_medo.jpg", personagem:"Ram", tipo:"Rosto", outfit:"Uniforme de empregada", sentimento:"Medo (raro nela)", intimidade:0, restricao:"Nenhuma"},
+    {n:12, arquivo:"ram_raiva.jpg", personagem:"Ram", tipo:"Rosto", outfit:"Uniforme de empregada", sentimento:"Raiva/sarcasmo cortante", intimidade:0, restricao:"Nenhuma"},
+    {n:13, arquivo:"ram_seria.jpg", personagem:"Ram", tipo:"Rosto", outfit:"Uniforme de empregada", sentimento:"Séria", intimidade:0, restricao:"Nenhuma"},
+    {n:14, arquivo:"beatrice_raiva.jpg", personagem:"Beatrice", tipo:"Rosto", outfit:"Vestido gótico da biblioteca", sentimento:"Raiva/irritação", intimidade:0, restricao:"Nenhuma"},
+    {n:15, arquivo:"emilia_default.jpg", personagem:"Emilia", tipo:"Rosto", outfit:"Vestido formal roxo", sentimento:"Neutra, gentil", intimidade:0, restricao:"Nenhuma"},
+    {n:16, arquivo:"emilia_timida.jpg", personagem:"Emilia", tipo:"Rosto", outfit:"Vestido formal roxo", sentimento:"Tímida", intimidade:1, restricao:"Nenhuma"},
+    {n:17, arquivo:"emilia_paixao.jpg", personagem:"Emilia", tipo:"Rosto", outfit:"Vestido formal roxo", sentimento:"Calorosa/afetuosa", intimidade:1, restricao:"Nenhuma"},
+    {n:18, arquivo:"ram_praia_a_frente.jpg", personagem:"Ram", tipo:"Corpo", outfit:"Biquíni de praia", sentimento:"Neutra, um pouco na defensiva", intimidade:2, restricao:"Só arco/OVA da praia"},
+    {n:19, arquivo:"ram_praia_a_tocando_top.jpg", personagem:"Ram", tipo:"Corpo", outfit:"Biquíni de praia", sentimento:"Tímida, se cobrindo", intimidade:2, restricao:"Só arco/OVA da praia"},
+    {n:20, arquivo:"ram_praia_a_bracos_cruzados.jpg", personagem:"Ram", tipo:"Corpo", outfit:"Biquíni de praia", sentimento:"Desconfortável, defensiva", intimidade:2, restricao:"Só arco/OVA da praia"},
+    {n:21, arquivo:"ram_praia_a_abracando_joelhos.jpg", personagem:"Ram", tipo:"Corpo", outfit:"Biquíni de praia", sentimento:"Encolhida, vulnerável", intimidade:2, restricao:"Só arco/OVA da praia"},
+    {n:22, arquivo:"ram_praia_b_costas_em_pe.jpg", personagem:"Ram", tipo:"Corpo", outfit:"Biquíni de praia", sentimento:"Neutra (de costas)", intimidade:2, restricao:"Só arco/OVA da praia"},
+    {n:23, arquivo:"ram_praia_b_agachada_desenhando.jpg", personagem:"Ram", tipo:"Corpo", outfit:"Biquíni de praia", sentimento:"Distraída, brincando na areia", intimidade:1, restricao:"Só arco/OVA da praia"},
+    {n:24, arquivo:"rem_praia_a_frente.jpg", personagem:"Rem", tipo:"Corpo", outfit:"Biquíni de praia", sentimento:"Neutra, um pouco tensa", intimidade:2, restricao:"Só arco/OVA da praia"},
+    {n:25, arquivo:"rem_praia_a_tocando_top.jpg", personagem:"Rem", tipo:"Corpo", outfit:"Biquíni de praia", sentimento:"Tímida, se cobrindo", intimidade:2, restricao:"Só arco/OVA da praia"},
+    {n:26, arquivo:"rem_praia_a_sentada.jpg", personagem:"Rem", tipo:"Corpo", outfit:"Biquíni de praia", sentimento:"Reservada", intimidade:2, restricao:"Só arco/OVA da praia"},
+    {n:27, arquivo:"rem_praia_a_abracando_joelhos.jpg", personagem:"Rem", tipo:"Corpo", outfit:"Biquíni de praia", sentimento:"Encolhida, vulnerável", intimidade:2, restricao:"Só arco/OVA da praia"},
+    {n:28, arquivo:"rem_praia_b_costas_acenando.jpg", personagem:"Rem", tipo:"Corpo", outfit:"Biquíni de praia", sentimento:"Sorridente, chamando alguém", intimidade:2, restricao:"Só arco/OVA da praia"},
+    {n:29, arquivo:"rem_praia_b_costas_areia.jpg", personagem:"Rem", tipo:"Corpo", outfit:"Biquíni de praia", sentimento:"Distraída, brincando na areia", intimidade:1, restricao:"Só arco/OVA da praia"},
+    {n:30, arquivo:"ma_praia_a_costas_olhando.jpg", personagem:"Ma", tipo:"Corpo", outfit:"Biquíni de praia (asas visíveis)", sentimento:"Insegura, olhando por cima do ombro", intimidade:2, restricao:"Só arco/OVA da praia — asas expostas em público, checar coerência com o medo dela de ser vista"},
+    {n:31, arquivo:"ma_praia_a_de_frente_sentada.jpg", personagem:"Ma", tipo:"Corpo", outfit:"Biquíni de praia (asas visíveis)", sentimento:"Serena, mais relaxada", intimidade:2, restricao:"Só arco/OVA da praia"},
+    {n:32, arquivo:"ma_praia_b_rindo_mao_estendida.jpg", personagem:"Ma", tipo:"Corpo", outfit:"Biquíni de praia", sentimento:"Rindo, aberta", intimidade:3, restricao:"Só arco/OVA da praia — nível alto de conforto, usar só depois de progresso real na confiança dela"},
+    {n:33, arquivo:"ma_praia_b_perfil_serio.jpg", personagem:"Ma", tipo:"Corpo", outfit:"Biquíni de praia", sentimento:"Séria, pensativa", intimidade:2, restricao:"Só arco/OVA da praia"},
+    {n:34, arquivo:"ma_praia_b_bracos_cruzados.jpg", personagem:"Ma", tipo:"Corpo", outfit:"Biquíni de praia", sentimento:"Reservada", intimidade:2, restricao:"Só arco/OVA da praia"},
+    {n:35, arquivo:"ma_praia_b_sorrindo_caranguejo.jpg", personagem:"Ma", tipo:"Corpo", outfit:"Biquíni de praia", sentimento:"Encantada, brincando (achou um caranguejo)", intimidade:2, restricao:"Só arco/OVA da praia"},
+    {n:36, arquivo:"beatrice_biblioteca3_apontando_brava.jpg", personagem:"Beatrice", tipo:"Corpo", outfit:"Vestido gótico da biblioteca", sentimento:"Brava, repreendendo", intimidade:0, restricao:"Nenhuma"},
+    {n:37, arquivo:"beatrice_biblioteca3_pensativa_livro.jpg", personagem:"Beatrice", tipo:"Corpo", outfit:"Vestido gótico da biblioteca", sentimento:"Pensativa, lendo", intimidade:0, restricao:"Nenhuma"},
+    {n:38, arquivo:"beatrice_biblioteca3_tomando_cha.jpg", personagem:"Beatrice", tipo:"Corpo", outfit:"Vestido gótico da biblioteca", sentimento:"Tranquila, tomando chá", intimidade:1, restricao:"Nenhuma"},
+    {n:39, arquivo:"beatrice_biblioteca3_encolhida_manta.jpg", personagem:"Beatrice", tipo:"Corpo", outfit:"Vestido gótico da biblioteca", sentimento:"Encolhida, vulnerável", intimidade:2, restricao:"Só depois de algum desenvolvimento da relação com ela"},
+    {n:40, arquivo:"rem_praia_mix_deitada_areia.jpg", personagem:"Rem", tipo:"Corpo", outfit:"Biquíni de praia", sentimento:"Animada, deitada de bruços acenando", intimidade:2, restricao:"Só arco/OVA da praia"},
+    {n:41, arquivo:"ram_praia_mix_na_agua.jpg", personagem:"Ram", tipo:"Corpo", outfit:"Biquíni de praia", sentimento:"Curiosa, entrando no mar, olhando por cima do ombro", intimidade:2, restricao:"Só arco/OVA da praia"},
+  ],
+  especiais: [
+    {n:1, arquivo:"rem_ma_consolo_noturno.jpg", descricao:"Rem sentada numa cadeira ao lado da cama, afagando a cabeça de Ma, que está deitada de bruços chorando, sangue visível na roupa. Cena de conforto pós-trauma — usar no Movimento 3 do Arco 2, depois de um encontro violento."},
+  ],
+  fundos: [
+    {n:1, arquivo:"floresta_noturna.jpg", periodo:"Noite", descricao:"Trilha de floresta escura, castelo avistado ao longe sob a lua."},
+    {n:2, arquivo:"clareira_luar.jpg", periodo:"Noite", descricao:"Mesma trilha florestal noturna, reaproveitada pra clareira."},
+    {n:3, arquivo:"mansao_interior.jpg", periodo:"Noite", descricao:"Corredor principal da mansão, candelabros acesos, tapete no chão."},
+    {n:4, arquivo:"bg_corredor_dia.jpg", periodo:"Dia", descricao:"Corredor com varanda, luz do dia entrando pelos arcos, vista pro jardim."},
+    {n:5, arquivo:"bg_jardim_fonte.jpg", periodo:"Dia", descricao:"Jardim formal com fonte central, onde a Ma conhece a Emilia."},
+    {n:6, arquivo:"bg_biblioteca.jpg", periodo:"Noite", descricao:"Biblioteca da Beatrice — estantes altíssimas, escada espiral, vitral ao fundo."},
+    {n:7, arquivo:"bg_cozinha.jpg", periodo:"Dia", descricao:"Cozinha da mansão, mesas de trabalho, janela em arco."},
+    {n:8, arquivo:"bg_quarto_dia.jpg", periodo:"Dia", descricao:"Quarto de hóspede da Ma, de manhã, luz entrando pela janela."},
+    {n:9, arquivo:"bg_quarto_simples.jpg", periodo:"Noite", descricao:"Mesmo quarto da Ma, à noite, iluminado por vela."},
+    {n:10, arquivo:"mansao_exterior.jpg", periodo:"Dia", descricao:"Fachada externa da mansão — falta versão noturna (ainda pendente)."},
+    {n:11, arquivo:"bg_interrogatorio_v2.jpg", periodo:"Noite", descricao:"Sala usada no interrogatório da Rem no Capítulo 2 (asset antigo, ainda não substituído)."},
+    {n:12, arquivo:"romance_bandagem.jpg", periodo:"Noite", descricao:"Cena de curativo/ferimento sendo tratado (asset antigo, ainda não substituído)."},
+  ],
+  pendentes_nao_catalogados: "Kits de beijo (Rem×Ma, Ram×Ma), variações de pijama/camisola de todas as personagens, uniforme alternativo da Ram, poses de corpo inteiro da Rem com/sem chifre manifestado, e o Roswaal ainda não entraram no catálogo em detalhe — ficam reservados até serem atribuídos a um capítulo real, pra não inventar contexto antes da hora."
+};
+
+function galleryCard(cat, item, idx){
+  const div = document.createElement('div');
+  div.className = 'gcard';
+  const img = document.createElement('img');
+  img.src = item.arquivo;
+  img.loading = 'lazy';
+  div.appendChild(img);
+  const num = document.createElement('div');
+  num.className = 'gnum';
+  num.textContent = `#${item.n}`;
+  div.appendChild(num);
+  if(cat === 'personagens'){
+    div.innerHTML += `
+      <div class="gfield"><b>Personagem:</b> ${item.personagem}</div>
+      <div class="gfield"><b>Tipo:</b> ${item.tipo}</div>
+      <div class="gfield"><b>Outfit:</b> ${item.outfit}</div>
+      <div class="gfield"><b>Sentimento:</b> ${item.sentimento}</div>
+      <div class="gfield"><b>Intimidade:</b> ${item.intimidade}/5</div>
+      <div class="gfield"><b>Restrição:</b> ${item.restricao}</div>`;
+  } else if(cat === 'especiais'){
+    div.innerHTML += `<div class="gfield">${item.descricao}</div>`;
+  } else if(cat === 'fundos'){
+    div.innerHTML += `
+      <div class="gfield"><b>Período:</b> ${item.periodo}</div>
+      <div class="gfield">${item.descricao}</div>`;
+  }
+  return div;
+}
+
+function renderGallery(cat){
+  const grid = document.getElementById('gallery-grid');
+  grid.innerHTML = '';
+  const items = ASSET_CATALOG[cat] || [];
+  items.forEach((item, i) => grid.appendChild(galleryCard(cat, item, i)));
+  document.querySelectorAll('.gallery-tab').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.cat === cat);
+  });
+}
+
+function openGallery(){
+  document.getElementById('gallery').classList.add('show');
+  renderGallery('personagens');
+}
+function closeGallery(){ document.getElementById('gallery').classList.remove('show'); }
+
+document.getElementById('gallery-btn').addEventListener('click', (e)=>{ e.stopPropagation(); openGallery(); });
+document.getElementById('gallery-btn-title').addEventListener('click', (e)=>{ e.stopPropagation(); openGallery(); });
+document.getElementById('gallery-close').addEventListener('click', closeGallery);
+document.querySelectorAll('.gallery-tab').forEach(btn=>{
+  btn.addEventListener('click', ()=> renderGallery(btn.dataset.cat));
+});
+
+function openCodex(){ document.getElementById('codex').classList.add('show'); }
+function closeCodex(){ document.getElementById('codex').classList.remove('show'); }
+document.getElementById('codex-btn').addEventListener('click', (e)=>{ e.stopPropagation(); openCodex(); });
+document.getElementById('codex-btn-title').addEventListener('click', (e)=>{ e.stopPropagation(); openCodex(); });
+document.getElementById('codex-close').addEventListener('click', closeCodex);
+
+document.getElementById('start-btn').addEventListener('click', async ()=>{
+  await tryResume();
+  document.getElementById('title-card').style.opacity = '0';
+  setTimeout(()=>{ document.getElementById('title-card').style.display='none'; },1200);
+  updateDots();
+  render();
+});
+</script>
+</body>
+</html>
