@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Sombra Entre Mundos — Extras Íntimos</title>
+<style>
+  :root{
+    --night:#14121f; --panel:#201c30; --moon:#d7dcec; --moon-dim:#9aa0bd;
+    --ember:#b1472b; --gold:#b89550; --ink:#09080f; --heat:#c45c8a; --filth:#6b5344;
+  }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body{ margin:0; padding:0; height:100%; background:var(--ink); font-family:Georgia,'Iowan Old Style',serif; overflow:hidden; }
+  #frame{ position:relative; width:100%; height:100dvh; overflow:hidden; background:var(--night); }
+  #scene{ position:absolute; inset:0; }
+  #scene .bg{ width:100%; height:100%; background:radial-gradient(ellipse at 50% 20%, rgba(180,80,90,.18), transparent 50%), linear-gradient(180deg,#1a1628,#0d0b14); }
+  #scene img#cg{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 20%; opacity:0; transition:opacity .35s ease; pointer-events:none; }
+  #scene img#cg.show{ opacity:1; }
+  #scene .bg.kiss{ background:radial-gradient(ellipse at 40% 40%, rgba(196,92,138,.28), #14121f 70%); }
+  #scene .bg.heat{ background:radial-gradient(ellipse at 50% 60%, rgba(177,71,43,.35), #1a1010 70%); }
+  #scene .bg.wet{ background:radial-gradient(ellipse at 50% 80%, rgba(90,110,90,.25), #12141a 70%); }
+  #scene .bg.filth{ background:radial-gradient(ellipse at 50% 70%, rgba(80,55,35,.4), #0e0c0a 70%); }
+  #vignette{ position:absolute; inset:0; background:radial-gradient(ellipse at 50% 30%, transparent 20%, rgba(9,8,15,.7) 100%); pointer-events:none; }
+  #title-card, #menu-card, #end-card{
+    position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    background:var(--ink); z-index:40; text-align:center; padding:0 6%;
+    pointer-events:auto;
+  }
+  #menu-card, #end-card{ display:none; overflow-y:auto; justify-content:flex-start; padding:2.2rem 6% 3rem; }
+  #menu-card.show, #end-card.show{ display:flex; }
+  #title-card h1, #menu-card h1, #end-card h2{ color:var(--moon); font-weight:400; font-size:1.4rem; font-style:italic; margin:0 0 .3rem; }
+  #title-card p, #menu-card .sub, #end-card p{ color:var(--gold); font-size:.88rem; margin:0 0 1.4rem; letter-spacing:.05em; }
+  button.gold{ background:transparent; border:1px solid var(--gold); color:var(--gold); font-family:inherit; font-size:1rem; padding:.85rem 1.8rem; cursor:pointer; border-radius:2px; margin:.25rem; position:relative; z-index:40; -webkit-appearance:none; touch-action:manipulation; }
+  .extra-btn{ width:100%; max-width:440px; text-align:left; background:rgba(32,28,48,.9); border:1px solid rgba(184,149,80,.4); color:var(--moon); font-family:inherit; padding:.85rem 1rem; margin:.35rem 0; border-radius:3px; cursor:pointer; }
+  .extra-btn small{ display:block; color:var(--moon-dim); font-size:.75rem; margin-top:.2rem; }
+  .warn{ color:#c9a07a; font-size:.78rem; max-width:440px; line-height:1.45; margin:0 0 1rem; }
+  h3.sec{ color:var(--gold); font-weight:400; font-size:.8rem; letter-spacing:.08em; margin:1.2rem 0 .4rem; width:100%; max-width:440px; text-align:left; }
+  #hud{ position:absolute; top:0; left:0; right:0; display:flex; justify-content:space-between; padding:.65rem .85rem; padding-top:max(.65rem, env(safe-area-inset-top)); z-index:5; pointer-events:none; background:linear-gradient(180deg, rgba(9,8,15,.96), transparent); }
+  #chapter-label{ color:var(--moon-dim); font-size:.7rem; font-style:italic; }
+  #meta{ display:flex; flex-direction:column; align-items:flex-end; gap:.18rem; }
+  .meta-row{ display:flex; align-items:center; gap:.3rem; }
+  .meta-label{ color:var(--moon-dim); font-size:.62rem; }
+  .dots{ display:flex; gap:3px; }
+  .dot{ width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,.15); }
+  .dot.on-heat{ background:var(--heat); }
+  .dot.on-trust{ background:var(--ember); }
+  .dot.on-filth{ background:var(--filth); }
+  #dialogue{ position:absolute; left:0; right:0; bottom:0; z-index:10; padding:0 3%; padding-bottom:max(.35rem, env(safe-area-inset-bottom)); }
+  #box{ background:linear-gradient(180deg, rgba(28,24,41,.2), var(--panel) 14%); border-top:1px solid rgba(184,149,80,.4); padding:.85rem .95rem 1.05rem; max-height:50vh; overflow-y:auto; }
+  #speaker{ display:inline-block; color:var(--gold); font-style:italic; font-size:.95rem; margin-bottom:.3rem; }
+  #text{ color:var(--moon); font-size:1.06rem; line-height:1.52; }
+  #tap-hint{ position:absolute; right:.9rem; bottom:.45rem; color:var(--moon-dim); font-size:.68rem; font-style:italic; opacity:.6; }
+  #choices{ display:none; flex-direction:column; gap:.5rem; margin-top:.65rem; }
+  #choices.show{ display:flex; }
+  .choice-btn{ background:rgba(20,18,31,.8); border:1px solid rgba(184,149,80,.5); color:var(--moon); font-family:inherit; font-size:.95rem; text-align:left; padding:.85rem 1rem; cursor:pointer; border-radius:3px; }
+  #click-catcher{ position:absolute; inset:0; z-index:8; pointer-events:none; }
+  #click-catcher.on{ pointer-events:auto; }
+  #back-menu{ position:absolute; top:max(.55rem, env(safe-area-inset-top)); left:.7rem; z-index:20; background:transparent; border:0; color:var(--moon-dim); font-family:inherit; font-size:.75rem; cursor:pointer; display:none; }
+</style>
+</head>
+<body>
+<div id="frame">
+  <div id="title-card">
+    <h1>Sombra Entre Mundos</h1>
+    <p>extras íntimos · Ma × Rem</p>
+    <button type="button" class="gold" id="start-btn">abrir extras</button>
+  </div>
+  <div id="menu-card">
+    <h1>Noites que a mansão não conta</h1>
+    <p class="sub">devagar. depois o resto.</p>
+    <p class="warn">Onze noites iniciais. Quase pegas mais de uma vez. Cura de água. Chifre como interruptor. Leite e inflar só quando o calor pede. Humilhação ainda é brincadeira entre as duas. Ram fiscaliza. Emilia não entende. Betty não se oferece. Incesto e imundície pesada estão no plano, trancados.</p>
+    <div id="extra-list"></div>
+    <button class="gold" id="reset-progress" style="margin-top:1.2rem">esquecer o que já leu</button>
+  </div>
+  <button id="back-menu">← extras</button>
+  <div id="scene"><div class="bg" id="bg"></div><img id="cg" alt=""></div>
+  <div id="vignette"></div>
+  <div id="hud">
+    <div id="chapter-label"></div>
+    <div id="meta">
+      <div class="meta-row"><span class="meta-label">calor</span><div class="dots" id="heat-dots"></div></div>
+      <div class="meta-row"><span class="meta-label">confiança</span><div class="dots" id="trust-dots"></div></div>
+      <div class="meta-row"><span class="meta-label">imundície</span><div class="dots" id="filth-dots"></div></div>
+    </div>
+  </div>
+  <div id="click-catcher"></div>
+  <div id="dialogue">
+    <div id="box">
+      <span id="speaker"></span>
+      <div id="text"></div>
+      <div id="choices"></div>
+      <div id="tap-hint">toque para continuar</div>
+    </div>
+  </div>
+  <div id="end-card">
+    <h2 id="end-title">Fim deste extra</h2>
+    <p id="end-body"></p>
+    <button class="gold" id="end-back">voltar aos extras</button>
+  </div>
+</div>
+<script>
+const CATALOG = [
+  {id:"e1", title:"I. A porta que não deveria abrir", blurb:"Beijo ruim. Cebola. Pelinhos. Nee-sama no corredor.", unlock:0, sec:"agora"},
+  {id:"e2", title:"II. A lista que Rem não deveria fazer", blurb:"Cabeça, seio por cima, axila, pé. Ainda vestidas.", unlock:1, sec:"agora"},
+  {id:"e3", title:"III. Passos no corredor", blurb:"Primeiro quase-flagra. As duas viram pedra.", unlock:2, sec:"agora"},
+  {id:"e4", title:"IV. A boca que tosse", blurb:"Primeiro oral. Sai errado. Tenta de novo.", unlock:3, sec:"agora"},
+  {id:"e5", title:"V. Água que cura o que a boca fez", blurb:"Tribade. Cura de água. Rosto perto da bunda.", unlock:4, sec:"agora"},
+  {id:"e6", title:"VI. Interruptor no chifre", blurb:"Mana. Asa. Formigamento. Quase pegas de novo.", unlock:5, sec:"agora"},
+  {id:"e7", title:"VII. Andar assim pela casa", blurb:"Brincadeira cruel entre as duas. Frederica quase vê.", unlock:6, sec:"agora"},
+  {id:"e8", title:"VIII. A ponta que não entra", blurb:"Anal que falha. Cura. Tenta de novo só um pouco.", unlock:7, sec:"agora"},
+  {id:"e9", title:"IX. A mansão fala baixo", blurb:"Ram fiscal. Emilia inocente. Betty e o silêncio.", unlock:8, sec:"agora"},
+  {id:"e10", title:"X. O que a magia faz no corpo", blurb:"Leite. Inflar. Humilhação só no quarto.", unlock:9, sec:"agora"},
+  {id:"e11", title:"XI. Sopa e a colher certa", blurb:"Aftercare longo. O que fica para depois.", unlock:10, sec:"agora"},
+  {id:"p12", title:"XII. Cio de verdade (plano)", blurb:"Breeding, calor que não cabe no jantar.", unlock:99, sec:"depois"},
+  {id:"p13", title:"XIII. Água que não é cura (plano)", blurb:"Xixi de verdade, barriga o dia inteiro.", unlock:99, sec:"depois"},
+  {id:"p14", title:"XIV. O que não se lava (plano)", blurb:"Cocô, vômito, engolir, aftercare pesado.", unlock:99, sec:"depois"},
+  {id:"p15", title:"XV. Fique quieta (plano)", blurb:"Faixas, tapa, ordem. Ainda com cura depois.", unlock:99, sec:"depois"},
+  {id:"p16", title:"XVI. A irmã na soleira (plano)", blurb:"Ram só olha. Muito depois. Sem boca ainda.", unlock:99, sec:"depois"},
+  {id:"p17", title:"XVII. Faróis (plano)", blurb:"Emilia sem entender. Betty fiscaliza, não entra.", unlock:99, sec:"depois"}
+];
+
+const CHAPTERS = {};
+
+CHAPTERS.e1 = {
+  label:"I — A porta",
+  end:"Ninguém gozou. Rem voltou para o colchão de empregada antes do galo. O laço amanheceu certo. O peito não.",
+  beats:[
+    {s:"night", sp:"", t:"A vela da cozinha morre. Rem seca a tigela duas vezes. Nee-sama já dormiria — ou fingiria. Rem não é Nee-sama. Rem é a que lava de novo quando já está limpo."},
+    {s:"night", sp:"Rem", t:"— Se Nee-sama visse Rem parada neste corredor, Nee-sama riria. Ou zangaria. As duas doem."},
+    {s:"night", sp:"", t:"O quarto de visitas fede a fogo baixo. Rem encosta a testa na madeira. Não porque é corajosa. Porque o pé não vira para trás."},
+    {s:"night", sp:"Ma", t:"— Pode entrar. Eu já... senti você. Três portas atrás."},
+    {s:"night", sp:"Rem", t:"— Rem pede desculpa. Rem não veio buscar bandeja."},
+    {s:"night", sp:"Ma", t:"— Eu sei."},
+    {s:"kiss", sp:"", t:"Camisola. Chifres pequenos. Escamas com suor. Rem faz uma reverência inútil, como se etiqueta salvasse o que ela veio fazer."},
+    {s:"kiss", sp:"Rem", t:"— Rem está com medo. Rem também está... alegre. Nee-sama diria que Rem mistura as coisas. Nee-sama acertaria."},
+    {s:"kiss", sp:"Ma", t:"— Senta. Não precisa de avental agora."},
+    {s:"kiss", sp:"Rem", t:"— Rem precisa. Rem é isso. Mas... pode sentar um pouco."},
+    {s:"kiss", sp:"", t:"Um palmo de colcha. Relógio da sala. Rem olha a mão de Ma como olha faca: com respeito e fome."},
+    {s:"kiss", sp:"Rem", t:"— Posso o ombro. Só o ombro. Rem promete. Rem é ruim de promessa."},
+    {s:"kiss", sp:"", t:"Escama quente. Pelo no colo da camisola. Cheiro azedo de dia inteiro — sovaco, virilha, um fundo que Rem não sabe nomear. Careta de verdade."},
+    {s:"kiss", sp:"Rem", t:"— Forte. Rem deveria sair. Rem não sai."},
+    {s:"kiss", sp:"Ma", t:"— O calor fede. Eu lavo. O corpo não escuta."},
+    {s:"kiss", sp:"Rem", t:"— Rem não pediu desculpa do cheiro. Rem pediu para ficar."},
+    {s:"kiss", sp:"", t:"O beijo é ruim. Dente. Cebola da sopa. Mão de Rem no joelho de Ma como cabo de vassoura."},
+    {s:"kiss", sp:"Ma", t:"— Sua boca é chá. E cebola."},
+    {s:"kiss", sp:"Rem", t:"— Ma-san não precisava falar da cebola."},
+    {s:"kiss", sp:"Ma", t:"— Precisava. Senão eu minto."},
+    {s:"kiss", sp:"Rem", t:"— ...Rem gosta quando Ma-san não mente. Mesmo assim."},
+    {s:"kiss", sp:"", t:"Saliva no queixo. Rem lambe o próprio pulso. Faz cara feia. Não sai."},
+    {s:"night", sp:"Rem", t:"— Ma-san tem pelinhos. Rem também. Rem raspava por causa do uniforme. Hoje Rem não raspou. Se Nee-sama visse..."},
+    {s:"night", sp:"Ma", t:"— Se Ram visse, eu também sumia."},
+    {s:"night", sp:"Rem", t:"— Nee-sama pode ver Rem. Nee-sama não pode... ficar olhando Ma-san assim. Rem não sabe por quê. Rem sabe."},
+    {s:"night", sp:"", t:"choices", choices:[
+      {label:"Deixar Ma erguer a saia só um pouco", flag:"confianca"},
+      {label:"Pedir para ver Ma primeiro. Rem é covarde", flag:"calor"}
+    ]},
+    {s:"night", sp:"", t:"{confianca:A saia sobe até a metade da coxa. Pelos pretos, úmidos, um cheiro de sabão que não venceu o do dia. Ma não toca o meio. Rem também não — ainda não sabe o que faria se tocasse.}{calor:A camisola abre. O pau pequeno dorme num tufo escuro. Tem um branco-amarelado na dobra da cabeça. Cheiro de virilha fechada. Rem tapa o nariz e não anda para trás.}"},
+    {s:"night", sp:"Rem", t:"— Não é livro. É vivo. Rem está vermelha. Rem quer que Nee-sama nunca saiba. Rem também quer voltar amanhã."},
+    {s:"night", sp:"", t:"Passos no corredor. As duas congelam. Ram bufa, não para. Rem ri no ombro de Ma, minúscula, culpada."},
+    {s:"night", sp:"Rem", t:"— Nee-sama sempre sabe. Rem vai levar bronca e voltar mesmo assim."},
+    {s:"night", sp:"Ma", t:"— Dorme aqui um pouco. Só a mão. O resto a gente não sabe ainda."},
+    {s:"night", sp:"Rem", t:"— Rem gosta quando Ma-san fala como se Rem merecesse tempo. Nee-sama merece tudo. Rem... quer um pedaço. Só de Ma-san. Não de outra pessoa. Rem falou demais."}
+  ]
+};
+
+CHAPTERS.e2 = {
+  label:"II — A lista",
+  end:"A lista foi para o bolso do avental. Ram encontrou um canto rasurado e não comentou. Ainda.",
+  beats:[
+    {s:"night", sp:"", t:"Café. Rem não derrama. Quase. Ram repara o 'quase' e guarda na boca."},
+    {s:"night", sp:"Ram", t:"— A irmã mais nova dormiu mal. Ram também. A parede é fina. Ram não perguntou."},
+    {s:"night", sp:"Rem", t:"— Rem pede desculpa, Nee-sama."},
+    {s:"night", sp:"Ram", t:"— Rem pede desculpa até do clima. Cansativo."},
+    {s:"night", sp:"", t:"No pátio, Emilia acena para Ma demais. Rem conta os lençóis duas vezes. Perde a conta."},
+    {s:"night", sp:"Rem", t:"— Emilia-sama é gentil. Rem sabe. Rem mesmo assim... não gosta do aceno. Rem é feia por dentro hoje."},
+    {s:"night", sp:"Ma", t:"— Eu acenei de volta por educação. Só."},
+    {s:"night", sp:"Rem", t:"— Rem acredita. Rem quer acreditar. Rem vai dobrar o lençol agora."},
+    {s:"night", sp:"Ma", t:"— Tem papel no seu avental."},
+    {s:"night", sp:"Rem", t:"— Lista. Coisas que Rem gosta quando Ma-san faz sem saber. Não é quarto. Ainda. Se fosse Nee-sama escrevendo, a letra saía direita."},
+    {s:"kiss", sp:"Rem", t:"— Um: cabeça. Dois: voz baixa. Três: chifres. Quatro: pescoço, mesmo fedido. Cinco: mão no ombro depois do serviço. Seis estava riscado."},
+    {s:"kiss", sp:"Ma", t:"— O seis."},
+    {s:"kiss", sp:"Rem", t:"— Peito. Rem teve vergonha da letra. Sete também. Rem não vai falar o sete no jardim."},
+    {s:"kiss", sp:"Ma", t:"— Qual é o sete."},
+    {s:"kiss", sp:"Rem", t:"— ...Que Ma-san não deixe outra pessoa chegar tão perto. Rem sabe que é feio. Rem escreveu mesmo assim."},
+    {s:"kiss", sp:"Ma", t:"— Está escrito nas duas direções."},
+    {s:"kiss", sp:"", t:"Rem no chão entre os joelhos de Ma. Mão no cabelo. Rem fecha o olho."},
+    {s:"kiss", sp:"Rem", t:"— Mais. Por favor. Rem fala demais quando gosta."},
+    {s:"kiss", sp:"", t:"Boca no antebraço. Suor. Careta. Beijo."},
+    {s:"kiss", sp:"", t:"choices", choices:[
+      {label:"Axila por cima da manga", flag:"confianca"},
+      {label:"Pé. Rem sabe ser empregada até nisso", flag:"calor"}
+    ]},
+    {s:"kiss", sp:"", t:"{confianca:Braço no ar. Ma ri no tecido e beija. Rem solta um som que não é de serviço.}{calor:Um sapato. Pé quente, pelo no dorso. Gosto de couro. Rem beija o arco e depois limpa a boca no avental.}"},
+    {s:"night", sp:"Ma", t:"— O seis. Por cima. Eu paro no onze."},
+    {s:"night", sp:"Rem", t:"— Rem ia parar no dez. Rem mentiu no nove."},
+    {s:"night", sp:"", t:"Palma no seio pelo avental. Rem conta baixo. Aftercare: água, cobertor, beijo na testa que dura um segundo a mais do que etiqueta."},
+    {s:"night", sp:"Rem", t:"— Amanhã isto é lista de compras. Nee-sama não acredita em nabo às duas da manhã. Mesmo assim."},
+    {s:"night", sp:"Ma", t:"— Não aceno de novo sem te avisar."},
+    {s:"night", sp:"Rem", t:"— ...Rem vai tentar não contar o aceno. Rem provavelmente vai contar."}
+  ]
+};
+
+CHAPTERS.e3 = {
+  label:"III — Passos",
+  end:"Ninguém viu. As duas lavaram as mãos como se fosse sangue. Era só saliva.",
+  beats:[
+    {s:"night", sp:"", t:"Despensa. Pote de geleia. Desculpa pronta. A porta não fecha direito — nunca fechou. Rem sabe. Esquece."},
+    {s:"kiss", sp:"Rem", t:"— Só um. Rem promete. Rem é péssima com promessa."},
+    {s:"kiss", sp:"", t:"Beijo melhor que o primeiro. Ainda torto. A mão de Ma na cintura. A de Rem no chifre, sem apertar."},
+    {s:"kiss", sp:"Rem", t:"— Assim. Só assim. Se alguém entrar, Rem... não sabe. Rem não quer que vejam Ma-san deste jeito. É de Rem. Isso é feio. Rem sabe."},
+    {s:"kiss", sp:"Ma", t:"— Também não quero que vejam você. Então a gente escuta."},
+    {s:"night", sp:"", t:"Madeira no corredor. Frederica. Voz de quem conta toalha."},
+    {s:"night", sp:"Frederica", t:"— Rem? A geleia da Emilia-sama não pode acabar de novo."},
+    {s:"night", sp:"", t:"Rem afasta Ma com força de oni, não de empregada. O pote cai. Não quebra. Quase."},
+    {s:"night", sp:"Rem", t:"— Aqui. Rem estava... alto. A prateleira."},
+    {s:"night", sp:"Frederica", t:"— ...O laço está torto. Ajeite antes da sala. Boa noite."},
+    {s:"night", sp:"", t:"A porta da despensa e o silêncio depois. Rem está branca. Ma também."},
+    {s:"night", sp:"Rem", t:"— Rem empurrou. Rem ia... Rem não ia. Rem empurrou. Frederica-san não pode ver. Ninguém pode."},
+    {s:"night", sp:"Ma", t:"— Você afastou. Só isso. Respira."},
+    {s:"night", sp:"", t:"choices", choices:[
+      {label:"Pedir para parar por hoje. Rem está tremendo", flag:"confianca"},
+      {label:"Pedir mais um beijo, menor, porque o medo deixou Rem acesa", flag:"calor"}
+    ]},
+    {s:"night", sp:"", t:"{confianca:Elas saem separadas. Rem ajeita o laço no reflexo da assadeira. Ma some pelo corredor dos fundos.}{calor:O segundo beijo é curto e com dente. Rem geme no pano do ombro de Ma e depois tapa a própria boca.}"},
+    {s:"night", sp:"Rem", t:"— Se Nee-sama pergunta, Rem fala da prateleira. Nee-sama não acredita em prateleira."},
+    {s:"night", sp:"Ma", t:"— Eu também ia tapar você. Só para constar."},
+    {s:"night", sp:"Rem", t:"— ...Rem gostou de ouvir. Rem não vai repetir no relatório."}
+  ]
+};
+
+CHAPTERS.e4 = {
+  label:"IV — A boca que tosse",
+  end:"Rem escovou os dentes três vezes. Ainda sentia pelo. Ma deixou água no criado-mudo.",
+  beats:[
+    {s:"night", sp:"", t:"Quarto. Porta encostada, não trancada — lição da despensa. Rem ajoelha porque o corpo pede e a cabeça ainda discute."},
+    {s:"heat", sp:"Rem", t:"— Rem vai tentar a boca. Se for nojento demais, Rem para. Rem fala parar. Ma-san escuta."},
+    {s:"heat", sp:"Ma", t:"— Escuto. E isso aqui não é para outra boca. Só para deixar dito."},
+    {s:"heat", sp:"Rem", t:"— Rem... gosta quando Ma-san fala isso. Rem também não quer outra boca. Rem é gananciosa. Rem pede desculpa."},
+    {s:"heat", sp:"", t:"Pelo no lábio. Debaixo do tufo o pau é pequeno e está meio sujo — um gosto de pele que não viu água direito, salgado, um pouco rançoso. Rem tosse de verdade, afasta, olhos cheios."},
+    {s:"heat", sp:"Rem", t:"— Ruim. Rem não sabia que tinha gosto. Espera. Rem não acabou."},
+    {s:"heat", sp:"", t:"Ela volta. Melhor um palmo. Ainda tosse no meio. O pau pequeno cabe; a garganta não concorda."},
+    {s:"heat", sp:"Ma", t:"— Para. Você chorou."},
+    {s:"heat", sp:"Rem", t:"— Rem chora fácil. Não é o mesmo que não querer."},
+    {s:"heat", sp:"", t:"choices", choices:[
+      {label:"Parar na segunda tosse e só ficar colada", flag:"confianca"},
+      {label:"Tentar mais uma vez, mais devagar, e engolir o que vazar", flag:"filth"}
+    ]},
+    {s:"heat", sp:"", t:"{confianca:Rem deita no colo. Ma penteia. O pau fica esquecido, ainda com o cheiro. Rem não pede para lavar. Ainda não sabe se lavar é fuga ou cuidado.}{filth:Rem volta. A língua limpa a dobra da cabeça — aquele branco grudado. Gosto forte. Ela engole e faz cara feia. — Rem fez. Rem não sabia o nome. Rem gostou de ter feito.}"},
+    {s:"night", sp:"Rem", t:"— Se outra pessoa fizesse isso em Ma-san, Rem... Rem ia ficar quieta. Rem ia odiar ficar quieta."},
+    {s:"night", sp:"Ma", t:"— Ninguém vai. Eu também não deixo."},
+    {s:"night", sp:"", t:"Aftercare: bacia, pano na boca. Rem murmura que Nee-sama lava melhor. Ma discorda em voz baixa."}
+  ]
+};
+
+CHAPTERS.e5 = {
+  label:"V — Água que cura",
+  end:"A luz azul sumiu do quarto. Rem dormiu com a palma na asa fechada de Ma.",
+  beats:[
+    {s:"heat", sp:"", t:"Rem senta no colo, ainda de camisola erguida. Buceta peluda no pau, sem entrar. Esfrega errado. Depois menos errado."},
+    {s:"heat", sp:"Rem", t:"— Assim. Ali. Rem não sabe o nome. Rem sabe o lugar."},
+    {s:"heat", sp:"", t:"Ma vira ela. A buceta de Rem é peluda, escura no meio, um cheiro de dia de saia. Mais acima o cu está no meio de pelinhos e não está limpo de livro — fedido de corpo que só lava depressa no balde. Ma encosta o nariz e recua um segundo. Volta."},
+    {s:"heat", sp:"Ma", t:"— Isso... não é perfume."},
+    {s:"heat", sp:"Rem", t:"— Rem lavou. Rem lavou de novo. Ainda assim. Rem não sabia que o fundo ficava. Rem não quer que Ma-san ache... ruim demais. Rem quer que ache só de Rem."},
+    {s:"heat", sp:"Ma", t:"— É seu. O cheiro também. Eu volto."},
+    {s:"heat", sp:"", t:"Língua na buceta, sobe, para no cu, desce. O gosto é amargo. Rem enterra a cara no travesseiro."},
+    {s:"heat", sp:"Ma", t:"— Posso a ponta da língua aqui?"},
+    {s:"heat", sp:"Rem", t:"— Pode. Se doer do jeito errado Rem fala. Rem... ah."},
+    {s:"heat", sp:"", t:"A língua cansa. Rem está inchada, arranhada de dente sem querer. Ela põe as duas mãos sobre o próprio colo e puxa mana — luz azul de água, a mesma que fecha corte de faca na cozinha."},
+    {s:"heat", sp:"Rem", t:"— Frio. Espera. Rem cura o que a boca estragou. Não o que Rem quis."},
+    {s:"heat", sp:"", t:"A ardência some. O tesão não. Ma beija a luz como se fosse pele."},
+    {s:"heat", sp:"", t:"choices", choices:[
+      {label:"Pedir para Ma sentar o rosto mais fundo, agora que não arde", flag:"calor"},
+      {label:"Pedir só a cura e o colo. Rem já teve o bastante", flag:"confianca"}
+    ]},
+    {s:"heat", sp:"", t:"{calor:Rem desce no rosto. Pelinhos no nariz de Ma. Ela geme e segura a cabeceira para não sentar com peso de oni.}{confianca:Luz azul. Cobertor. Rem conta as tábuas do teto até o coração descer.}"},
+    {s:"night", sp:"Rem", t:"— A cura é para ferido. Rem usou para tesão. Roswaal-sama chamaria isso de desperdício. Rem chama de noite."},
+    {s:"night", sp:"Rem", t:"— Ma-san. Se Emilia-sama pedir para Ma-san sentar no jardim de novo... Rem vai servir o chá e vai ficar quieta. Rem vai odiar ficar quieta."},
+    {s:"night", sp:"Ma", t:"— Então eu sento do seu lado. Sempre."}
+  ]
+};
+
+CHAPTERS.e6 = {
+  label:"VI — Interruptor",
+  end:"Os chifres latejaram até de manhã. Rem serviu o chá com a manga abaixada.",
+  beats:[
+    {s:"heat", sp:"", t:"Cio baixo. Asas semiabertas sem Ma pedir. Rem encosta o polegar na base do chifre de Ma — e o quarto inteiro esquenta um grau."},
+    {s:"heat", sp:"Ma", t:"— Isso. Aí. Se apertar mana junto eu... não finjo educação."},
+    {s:"heat", sp:"Rem", t:"— Então Rem aperta um pouco. Rem também é oni. Rem esquece quando lava chão."},
+    {s:"heat", sp:"", t:"Chifre em chifre. Estalo. Rem ri no nariz dela. Mana nas duas pontas: um formigamento que desce até o pau e até a buceta, ao mesmo tempo."},
+    {s:"heat", sp:"Rem", t:"— Ah— isso não é mão. Isso é... dentro."},
+    {s:"heat", sp:"Ma", t:"— Só você aperta assim. Se outra mão chegar no chifre eu quebro."},
+    {s:"heat", sp:"Rem", t:"— Rem também. Rem ia... Rem não ia fazer mal. Rem ia tirar a mão. Com força."},
+    {s:"night", sp:"", t:"Passos. Petra, cantarolando errado no corredor. As asas se fecham com um bater seco demais."},
+    {s:"night", sp:"Petra", t:"— Rem-neesama? Tem poeira na— ah. Desculpa. Pensei que estava vazia."},
+    {s:"night", sp:"Rem", t:"— Poeira. Rem... depois. Dorme, Petra."},
+    {s:"night", sp:"", t:"A menina vai embora. Rem está com as unhas cravadas na própria saia."},
+    {s:"night", sp:"Rem", t:"— Rem ia gritar. Petra não pode ouvir. Petra também não pode ver Ma-san deste jeito. Ninguém."},
+    {s:"night", sp:"", t:"choices", choices:[
+      {label:"Soltar o chifre e só abraçar até o calor baixar", flag:"confianca"},
+      {label:"Apertar de novo, mais fraco, agora que a porta fechou", flag:"calor"}
+    ]},
+    {s:"night", sp:"", t:"{confianca:Asa como cobertor. Rem conta a respiração de Ma. O formigamento vira sono.}{calor:O segundo aperto é menor e pior. Ma goza na coxa de Rem sem entrar. Quente. Rem olha a mancha como quem olha leite derramado.}"},
+    {s:"night", sp:"Rem", t:"— Rem cura isso também. Depois. Agora Rem quer olhar. É de Rem. A mancha. Rem falou feio de novo."},
+    {s:"night", sp:"Ma", t:"— Pode falar feio. Eu gosto."}
+  ]
+};
+
+CHAPTERS.e7 = {
+  label:"VII — Andar assim",
+  end:"O avental foi lavado duas vezes. A brincadeira ficou. Frederica não falou nada. Isso foi pior.",
+  beats:[
+    {s:"night", sp:"Ma", t:"— Proposta feia. A gente se arruma. Você vai servir o pão. Por baixo... ainda molhado. Só um pouco. Se for demais a gente para no corredor."},
+    {s:"night", sp:"Rem", t:"— Rem... aceita. Rem odeia aceitar. Rem aceita. Se Nee-sama cheirar, Rem morre. Rem aceita mesmo assim."},
+    {s:"night", sp:"Ma", t:"— Se alguém encostar em você no hall, a brincadeira acaba. Eu puxo você."},
+    {s:"night", sp:"Rem", t:"— Rem também puxa Ma-san. Rem é forte. Rem usa isso para prato. Hoje Rem usa para isso."},
+    {s:"wet", sp:"", t:"Uma linha fria na coxa, de propósito. Rem anda. O copo não treme. O joelho sim."},
+    {s:"wet", sp:"Ram", t:"— A irmã mais nova está vermelha. O pão também não merece tanto respeito."},
+    {s:"wet", sp:"Rem", t:"— Forno. Rem ficou perto."},
+    {s:"wet", sp:"Ram", t:"— Hm."},
+    {s:"wet", sp:"", t:"Frederica cruza o hall. Rem vira o prato demais. Uma gota quase — não cai."},
+    {s:"wet", sp:"Frederica", t:"— Cuidado com o tapete de Roswaal-sama."},
+    {s:"wet", sp:"Rem", t:"— Sim."},
+    {s:"wet", sp:"", t:"No depósito, Rem encosta a testa na prateleira."},
+    {s:"wet", sp:"Rem", t:"— Rem gostou. Rem é horrível. Rem não quer que Frederica-san saiba o porquê. Rem quer que só Ma-san saiba."},
+    {s:"wet", sp:"", t:"choices", choices:[
+      {label:"Limpar agora, com cura, e nunca mais hoje", flag:"confianca"},
+      {label:"Pedir para Ma marcar de novo, menor, só a calcinha", flag:"filth"}
+    ]},
+    {s:"wet", sp:"", t:"{confianca:Luz azul na coxa. A mancha some. Rem beija Ma com a boca de quem pediu desculpa ao tapete.}{filth:Outra marca. Menor. Rem anda até o fim do corredor dos fundos e volta. Os olhos estão cheios e acesos.}"},
+    {s:"night", sp:"Ma", t:"— Depois eu lavo seu cabelo. Você serviu o pão. Isso conta como trabalho."},
+    {s:"night", sp:"Rem", t:"— Rem não vai colocar isso no relatório. Rem também não vai deixar outra pessoa lavar o cabelo de Rem. Só Ma-san. Rem... falou de novo."}
+  ]
+};
+
+CHAPTERS.e8 = {
+  label:"VIII — A ponta",
+  end:"Não entrou. Quase. A luz azul fez o cu de Rem voltar a ser só cu. Elas riram disso, cansadas.",
+  beats:[
+    {s:"heat", sp:"", t:"Antes, as duas tentam o balde. Sabão da cozinha. Rem lava o cu de Ma; Ma lava o de Rem. Água suja. O pelo fica úmido e o cheiro baixa — não some. Rem cheira o próprio pulso e franze."},
+    {s:"heat", sp:"Rem", t:"— Rem lavou. Ainda fede. O de Ma-san também. Rem não sabe se isso é defeito. Rem não quer que outra pessoa cheire. Só Ma-san. Mesmo fedido."},
+    {s:"heat", sp:"Ma", t:"— É corpo. A gente não nasceu sabendo. E é nosso."},
+    {s:"heat", sp:"Rem", t:"— Rem quer tentar atrás mesmo assim. Só a cabeça. Se não couber, não cabe."},
+    {s:"heat", sp:"", t:"O pau peludo, ainda com um resto branco na dobra que o sabão não levou. Baba. Língua no cu de Rem — pelo, amargo, limpo pela metade. Dedo na ponta: entra, arde, sai. Rem bate na cama uma vez, não duas."},
+    {s:"heat", sp:"Rem", t:"— Espera. Espera. Rem cura."},
+    {s:"heat", sp:"", t:"Água azul no anel. O ardor some. Rem respira fundo."},
+    {s:"heat", sp:"Ma", t:"— Acabou por hoje."},
+    {s:"heat", sp:"Rem", t:"— Mais a cabeça. Só a cabeça. Rem pede. Rem é teimosa. Rem não quer que Ma-san faça isso com outra. Rem sabe que Ma-san não faria. Rem pede mesmo assim."},
+    {s:"heat", sp:"Ma", t:"— Não faria. Entra só a cabeça. Eu paro quando você bater de novo."},
+    {s:"heat", sp:"", t:"A cabeça encosta. Entra meio dedo de pau. Para. Rem chora no lençol. Não é tragédia. É corpo."},
+    {s:"heat", sp:"", t:"choices", choices:[
+      {label:"Parar na meia cabeça e curar de novo", flag:"confianca"},
+      {label:"Ficar assim um minuto, sem mexer, só cheia um pouco", flag:"calor"}
+    ]},
+    {s:"heat", sp:"", t:"{confianca:Sai. Luz. Beijo na espinha. Rem agradece como agradece prato lavado.}{calor:Um minuto. Rem conta. No doze pede para sair. Ma sai. As duas riem porque doze foi número de empregada.}"},
+    {s:"night", sp:"Rem", t:"— Outro dia. Não amanhã. Rem é lenta. Rem é de Ma-san mesmo lenta."}
+  ]
+};
+
+CHAPTERS.e9 = {
+  label:"IX — A mansão fala",
+  end:"Ninguém expulsou. O chá ficou doce. Rem não reclamou. Ram também não, o que foi um milagre pequeno.",
+  beats:[
+    {s:"night", sp:"Ram", t:"— A irmã mais nova lava colchão de madrugada e mente prateleira. Ram não é surda. Ram também não é cega. Ram é preguiçosa. Há diferença."},
+    {s:"night", sp:"Rem", t:"— Rem sente muito pelo barulho, Nee-sama."},
+    {s:"night", sp:"Ram", t:"— Ram sente pena da parede. E um pouco da irmã mais nova, o que é irritante. Não façam na hora do chá de Roswaal-sama. Ram não vai explicar para ele o que é colchão."},
+    {s:"night", sp:"Rem", t:"— Rem obedece, Nee-sama. Rem... não vai explicar tampouco."},
+    {s:"night", sp:"", t:"Emilia no jardim, Puck no ombro."},
+    {s:"night", sp:"Emilia", t:"— Rem está andando esquisito. Ma também. Vocês brigaram? Posso ajudar a pedir desculpa. Eu sou boa nisso. Às vezes."},
+    {s:"night", sp:"Rem", t:"— Não foi briga, Emilia-sama. Rem... tropeçou."},
+    {s:"night", sp:"Emilia", t:"— Ah. Então toma cuidado. O chão da mansão é traiçoeiro. Puck já caiu no tapete."},
+    {s:"night", sp:"Puck", t:"— Lia. Deixa. Tem cheiro de conversa que não é para gato."},
+    {s:"night", sp:"Emilia", t:"— Hã? Tá. Fico feliz que vocês sejam amigas. Amizade é importante. Ma, se quiser, a gente pode tomar chá depois."},
+    {s:"night", sp:"", t:"Rem segura a bandeja com os dois polegares. A bandeja não treme. O polegar sim."},
+    {s:"night", sp:"Rem", t:"— Emilia-sama é muito gentil. Ma-san... já tem chá. Com Rem. Se Emilia-sama permitir."},
+    {s:"night", sp:"Ma", t:"— Já tenho. Obrigado. De verdade."},
+    {s:"night", sp:"Emilia", t:"— Ah! Que bom. Amizade com chá também conta."},
+    {s:"night", sp:"", t:"Biblioteca. Beatrice não levanta o olho."},
+    {s:"night", sp:"Beatrice", t:"— Betty não quer nome, de fato. A de cabelo azul e a de fogo estão fazendo barulho de madrugada, suponho. Betty precisa de silêncio. Betty não precisa de detalhes, de fato."},
+    {s:"night", sp:"Ma", t:"— Desculpa."},
+    {s:"night", sp:"Beatrice", t:"— Desculpa vem com biscoito, suponho. E a de cabelo azul para de sorrir para o chão. Betty vê, de fato."},
+    {s:"night", sp:"Rem", t:"— Rem não estava sorrindo."},
+    {s:"night", sp:"Beatrice", t:"— Estava sim, de fato."},
+    {s:"night", sp:"", t:"Roswaal passa e só cantarola. Rem fica roxa. Ma quer desaparecer nas escamas."},
+    {s:"kiss", sp:"Rem", t:"— O mundo soube um pedaço. Rem ainda quer. Rem é teimosa. Nee-sama tem razão nisso."},
+    {s:"kiss", sp:"Rem", t:"— Emilia-sama não entendeu. Rem quase gostou. Rem também odiou o convite de chá. Rem é um problema."},
+    {s:"kiss", sp:"Ma", t:"— Eu gosto desse problema. E o chá é seu."}
+  ]
+};
+
+CHAPTERS.e10 = {
+  label:"X — O que a magia faz",
+  end:"A barriga voltou ao normal. O leite no avental não. Rem lavou com cara de inventário.",
+  beats:[
+    {s:"heat", sp:"", t:"Cio mais alto. Os seios de Ma doem. Uma gota esbranquiçada no tecido. Rem olha como olha leite azedo: com ofício."},
+    {s:"heat", sp:"Rem", t:"— Saiu. Rem pode... Rem quer ver se é gosto de leite ou de monstro."},
+    {s:"heat", sp:"Ma", t:"— Só você. Se outra boca chegar aqui eu fecho a asa."},
+    {s:"heat", sp:"Rem", t:"— Rem não deixa chegar. Rem... vai tentar não ser assustadora. Rem vai falhar."},
+    {s:"heat", sp:"", t:"É os dois. Rem tosse. Volta. Engole de propósito um gole pequeno."},
+    {s:"heat", sp:"Rem", t:"— Doce errado. Rem fez. Rem não vai escrever isso."},
+    {s:"heat", sp:"Ma", t:"— Posso tentar uma coisa de fogo baixo. Encher. Sem xixi. Só ar quente sob a pele. Se você odiar, eu solto."},
+    {s:"heat", sp:"Rem", t:"— Rem odeia a ideia. Rem quer a ideia. Faz devagar. Se alguém bater, Rem esconde a barriga. Rem esconde Ma-san também."},
+    {s:"heat", sp:"", t:"A barriga de Rem arredonda um pouco — feitiço tosco, vergonhoso, íntimo. Ela põe as duas mãos em cima e ri um riso assustado."},
+    {s:"heat", sp:"Rem", t:"— Rem parece... cheia. Rem não está. Rem sabe. O corpo não sabe."},
+    {s:"heat", sp:"", t:"choices", choices:[
+      {label:"Pedir para soltar agora e só mamar o que restou", flag:"confianca"},
+      {label:"Pedir para andar assim até a porta e voltar. Só as duas", flag:"filth"}
+    ]},
+    {s:"heat", sp:"", t:"{confianca:O ar sai. Rem mama o seio de Ma com cuidado de ferido. Luz azul no próprio ventre, por mania.}{filth:Cinco passos até a porta. Cinco de volta. Rem está vermelha até o chifre. Ma solta o feitiço. As duas se encostam na madeira e riem sem barulho.}"},
+    {s:"night", sp:"", t:"Aftercare: pomada na membrana da asa, cabelo, água. Rem chama Ma de 'senhora' uma vez e finge que foi erro de etiqueta."},
+    {s:"night", sp:"Ma", t:"— Pode chamar. Só você."},
+    {s:"night", sp:"Rem", t:"— Rem gostou. Rem vai fingir que foi etiqueta. Rem é péssima em fingir."}
+  ]
+};
+
+CHAPTERS.e11 = {
+  label:"XI — A colher certa",
+  end:"A sopa acabou. O resto do mapa ficou no avental, em letra pequena, para quando Rem souber o próprio nome no escuro.",
+  beats:[
+    {s:"night", sp:"", t:"Cozinha morta. Sopa demais. Rem serve Ma com a colher que ela escolheu — a de cabo liso, não a de festa."},
+    {s:"night", sp:"Rem", t:"— Hoje não tem boca. Tem caldo. Rem promete. Rem provavelmente quebra um beijo. Não o resto."},
+    {s:"night", sp:"Ma", t:"— Eu aceito caldo."},
+    {s:"night", sp:"", t:"{calor:A mancha do cap. VI ainda vive na cabeça das duas. Rem olha a coxa de Ma e desvia para a sopa.}{confianca:Rem fala de Petra e do susto como quem fala de chuva. Ma escuta.}"},
+    {s:"night", sp:"Rem", t:"— Rem ama a voz de Ma-san. O jeito de andar. O chifre quando formiga. A mão no laço. Rem ama até o fedor, o que é defeito. Rem ama que é só de Rem. Se Nee-sama perguntar o que Rem ama, Rem vai falar de sopa. Mentira. Rem fala de Ma-san."},
+    {s:"night", sp:"Ma", t:"— Eu também. Inclusive a lista. Inclusive a tosse. Inclusive o doze. Inclusive quando você aperta o prato demais porque Emilia convidou."},
+    {s:"night", sp:"Rem", t:"— Rem... não quer que Ma-san tome chá com outra. Rem sabe que Emilia-sama é Emilia-sama. Rem mesmo assim não quer. Rem é oni. Rem pede desculpa por ser oni."},
+    {s:"night", sp:"Ma", t:"— Não pede. Eu também não quero outra mão no meu chifre. A gente é duas oni ruins de etiqueta."},
+    {s:"kiss", sp:"Rem", t:"— Depois... tem coisa que Rem ainda não é. Xixi de verdade. Sujeira. Nee-sama na porta. Emilia-sama sem entender. Betty sem entrar. Rem quer isso longe. Rem quer Ma-san perto. Só perto de Rem."},
+    {s:"kiss", sp:"Ma", t:"— Longe. Perto. Só você. Eu sei a diferença."},
+    {s:"kiss", sp:"Rem", t:"— Aftercare de hoje é louça. Ma-san seca. Rem lava. Sem tesão. Com a toalha certa."},
+    {s:"kiss", sp:"Ma", t:"— Sim, senhora."},
+    {s:"kiss", sp:"Rem", t:"— ...Rem gostou. Rem vai fingir que não. Dorme. Do lado. Rem não empresta o lado."}
+  ]
+};
+
+
+function loadFlags(){
+  try{ return Object.assign({calor:0,confianca:0,filth:0}, JSON.parse(localStorage.getItem("sombra_flags")||"{}")); }
+  catch(e){ return {calor:0,confianca:0,filth:0}; }
+}
+function saveFlags(){ localStorage.setItem("sombra_flags", JSON.stringify(flags)); }
+
+let flags = loadFlags();
+let progress = Number(localStorage.getItem("sombra_extras_progress")||0);
+let idx=0, current=null;
+
+function saveProgress(n){
+  progress = Math.max(progress, n);
+  localStorage.setItem("sombra_extras_progress", String(progress));
+}
+const SCENE_IMG = {
+  night: "sombra_cg/bed.jpg",
+  kiss: "sombra_cg/bed_close.jpg",
+  heat: "sombra_cg/heat1.jpg",
+  wet: "sombra_cg/bath.jpg",
+  filth: "sombra_cg/heat2.jpg"
+};
+const EXTRA_IMG = {
+  "e1:0": "sombra_cg/bed.jpg",
+  "e1:6": "sombra_cg/bed_close.jpg",
+  "e1:16": "sombra_cg/kiss_close.jpg",
+  "e2:12": "sombra_cg/kiss2.jpg",
+  "e3:1": "sombra_cg/kiss3.jpg",
+  "e4:1": "sombra_cg/heat2.jpg",
+  "e5:0": "sombra_cg/heat1.jpg",
+  "e5:3": "sombra_cg/kiss_close.jpg"
+};
+function setScene(k, imgPath){
+  document.getElementById("bg").className = "bg" + (k && k!=="night" ? " "+k : "");
+  const el = document.getElementById("cg");
+  const src = imgPath || SCENE_IMG[k] || "";
+  if(src){
+    if(el.getAttribute("data-src") !== src){
+      el.src = src;
+      el.setAttribute("data-src", src);
+    }
+    el.classList.add("show");
+  } else {
+    el.classList.remove("show");
+  }
+}
+function dots(){
+  const fill=(id,n,cls)=>{
+    const el=document.getElementById(id); el.innerHTML="";
+    for(let i=0;i<5;i++){ const d=document.createElement("div"); d.className="dot"+(i<n?" "+cls:""); el.appendChild(d); }
+  };
+  fill("heat-dots", flags.calor, "on-heat");
+  fill("trust-dots", flags.confianca, "on-trust");
+  fill("filth-dots", flags.filth, "on-filth");
+}
+function applyFlagText(text){
+  if(!text) return "";
+  text = text.replace(/\{([^:}]+):([^}]*)\}\{([^:}]+):([^}]*)\}/g,(m,f1,t1,f2,t2)=>{
+    return (flags[f1]||0) >= (flags[f2]||0) ? t1 : t2;
+  });
+  text = text.replace(/\{([^:}]+):([^}]*)\}/g,(m,f,t)=> (flags[f]||0)>0 ? t : "");
+  return text;
+}
+function showMenu(){
+  document.getElementById("click-catcher").classList.remove("on");
+  document.getElementById("title-card").style.display="none";
+  document.getElementById("end-card").classList.remove("show");
+  document.getElementById("menu-card").classList.add("show");
+  document.getElementById("menu-card").style.display="flex";
+  document.getElementById("back-menu").style.display="none";
+  document.getElementById("dialogue").style.display="none";
+  const list=document.getElementById("extra-list"); list.innerHTML="";
+  let lastSec="";
+  CATALOG.forEach(c=>{
+    if(c.sec!==lastSec){
+      const h=document.createElement("h3");
+      h.className="sec";
+      h.textContent = c.sec==="agora" ? "AS ONZE NOITES" : "DEPOIS — PLANO";
+      list.appendChild(h);
+      lastSec=c.sec;
+    }
+    const b=document.createElement("button");
+    b.className="extra-btn";
+    const locked = c.unlock===99 || progress < c.unlock;
+    b.innerHTML = `<strong>${c.title}</strong><small>${c.unlock===99?"ainda não é a noite":(locked?"termine o extra anterior":c.blurb)}</small>`;
+    b.disabled = locked;
+    b.style.opacity = locked?.45:1;
+    b.onclick=()=>{ if(!locked && CHAPTERS[c.id]) startChapter(c.id); };
+    list.appendChild(b);
+  });
+}
+function startChapter(id){
+  current = CHAPTERS[id];
+  if(!current){ alert("capítulo não carregou: "+id); return; }
+  current._id = id;
+  idx=0;
+  document.getElementById("menu-card").classList.remove("show");
+  document.getElementById("menu-card").style.display="none";
+  document.getElementById("dialogue").style.display="block";
+  document.getElementById("back-menu").style.display="block";
+  document.getElementById("click-catcher").classList.add("on");
+  document.getElementById("chapter-label").textContent=current.label;
+  dots(); render();
+}
+function render(){
+  if(!current) return;
+  if(idx>=current.beats.length){ endChapter(); return; }
+  const b=current.beats[idx];
+  const imgKey = (current._id||"") + ":" + idx;
+  setScene(b.s, b.img || EXTRA_IMG[imgKey]);
+  const sp=document.getElementById("speaker");
+  const tx=document.getElementById("text");
+  const ch=document.getElementById("choices");
+  const hint=document.getElementById("tap-hint");
+  sp.textContent=b.sp||"";
+  sp.style.display=b.sp?"inline-block":"none";
+  tx.textContent=applyFlagText(b.t==="choices"?"":b.t);
+  ch.innerHTML="";
+  if(b.choices){
+    ch.classList.add("show"); hint.style.display="none";
+    b.choices.forEach(c=>{
+      const btn=document.createElement("button");
+      btn.className="choice-btn"; btn.textContent=c.label;
+      btn.onclick=e=>{
+        e.stopPropagation();
+        if(c.flag) flags[c.flag]=(flags[c.flag]||0)+1;
+        saveFlags(); dots(); idx++; render();
+      };
+      ch.appendChild(btn);
+    });
+  } else { ch.classList.remove("show"); hint.style.display="block"; }
+  document.getElementById("box").scrollTop=0;
+}
+function endChapter(){
+  const n = CATALOG.findIndex(c=>c.id===current._id)+1;
+  saveProgress(n);
+  document.getElementById("end-title").textContent=current.label;
+  document.getElementById("end-body").textContent=current.end;
+  document.getElementById("end-card").classList.add("show");
+  document.getElementById("back-menu").style.display="none";
+}
+document.getElementById("click-catcher").addEventListener("click",()=>{
+  if(!current) return;
+  const b=current.beats[idx];
+  if(b && b.choices) return;
+  idx++; render();
+});
+function bindTap(id, fn){
+  const el=document.getElementById(id);
+  if(!el) return;
+  el.addEventListener("click", function(e){ e.preventDefault(); e.stopPropagation(); fn(); });
+  el.addEventListener("touchend", function(e){ e.preventDefault(); e.stopPropagation(); fn(); }, {passive:false});
+}
+bindTap("start-btn", showMenu);
+bindTap("end-back", showMenu);
+bindTap("back-menu", showMenu);
+document.getElementById("title-card").addEventListener("click", function(e){
+  if(e.target && e.target.id==="title-card" || e.target.closest("#title-card")) showMenu();
+});
+document.getElementById("reset-progress").onclick=()=>{
+  localStorage.removeItem("sombra_extras_progress");
+  localStorage.removeItem("sombra_flags");
+  progress=0; flags={calor:0,confianca:0,filth:0};
+  showMenu();
+};
+</script>
+</body>
+</html>
