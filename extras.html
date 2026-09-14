@@ -1,1 +1,102 @@
-<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>Sombra extras</title><style>body{margin:0;background:#09080f;color:#d7dcec;font-family:Georgia,serif}#app{max-width:440px;margin:0 auto;padding:1rem}button{display:block;width:100%;margin:.4rem 0;padding:.8rem;background:#201c30;color:#d7dcec;border:1px solid #b89550;font-family:inherit}#box{min-height:40vh;padding:1rem;border-top:1px solid #b89550}</style></head><body><div id="app"><h1>Sombra — extras</h1><p>Carregando noites… se esta linha ficar, atualize em 1 min.</p><p><a href="./index.html" style="color:#b89550">voltar ao jogo</a></p><div id="box"></div></div><script>location.replace('./extras.html?v=2');</script></body></html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Sombra Entre Mundos — Extras Íntimos</title>
+<style>
+  :root{
+    --night:#14121f; --panel:#201c30; --moon:#d7dcec; --moon-dim:#9aa0bd;
+    --ember:#b1472b; --gold:#b89550; --ink:#09080f; --heat:#c45c8a; --filth:#6b5344;
+  }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body{ margin:0; padding:0; height:100%; background:var(--ink); font-family:Georgia,'Iowan Old Style',serif; overflow:hidden; }
+  #frame{ position:relative; width:100%; height:100dvh; overflow:hidden; background:var(--night); }
+  #scene{ position:absolute; inset:0; }
+  #scene .bg{ width:100%; height:100%; background:radial-gradient(ellipse at 50% 20%, rgba(180,80,90,.18), transparent 50%), linear-gradient(180deg,#1a1628,#0d0b14); }
+  #scene img#cg{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 20%; opacity:0; transition:opacity .35s ease; pointer-events:none; }
+  #scene img#cg.show{ opacity:1; }
+  #scene .bg.kiss{ background:radial-gradient(ellipse at 40% 40%, rgba(196,92,138,.28), #14121f 70%); }
+  #scene .bg.heat{ background:radial-gradient(ellipse at 50% 60%, rgba(177,71,43,.35), #1a1010 70%); }
+  #scene .bg.wet{ background:radial-gradient(ellipse at 50% 80%, rgba(90,110,90,.25), #12141a 70%); }
+  #scene .bg.filth{ background:radial-gradient(ellipse at 50% 70%, rgba(80,55,35,.4), #0e0c0a 70%); }
+  #vignette{ position:absolute; inset:0; background:radial-gradient(ellipse at 50% 30%, transparent 20%, rgba(9,8,15,.7) 100%); pointer-events:none; }
+  #title-card, #menu-card, #end-card{
+    position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    background:var(--ink); z-index:40; text-align:center; padding:0 6%;
+    pointer-events:auto;
+  }
+  #menu-card, #end-card{ display:none; overflow-y:auto; justify-content:flex-start; padding:2.2rem 6% 3rem; }
+  #menu-card.show, #end-card.show{ display:flex; }
+  #title-card h1, #menu-card h1, #end-card h2{ color:var(--moon); font-weight:400; font-size:1.4rem; font-style:italic; margin:0 0 .3rem; }
+  #title-card p, #menu-card .sub, #end-card p{ color:var(--gold); font-size:.88rem; margin:0 0 1.4rem; letter-spacing:.05em; }
+  button.gold{ background:transparent; border:1px solid var(--gold); color:var(--gold); font-family:inherit; font-size:1rem; padding:.85rem 1.8rem; cursor:pointer; border-radius:2px; margin:.25rem; position:relative; z-index:40; -webkit-appearance:none; touch-action:manipulation; }
+  .extra-btn{ width:100%; max-width:440px; text-align:left; background:rgba(32,28,48,.9); border:1px solid rgba(184,149,80,.4); color:var(--moon); font-family:inherit; padding:.85rem 1rem; margin:.35rem 0; border-radius:3px; cursor:pointer; }
+  .extra-btn small{ display:block; color:var(--moon-dim); font-size:.75rem; margin-top:.2rem; }
+  .warn{ color:#c9a07a; font-size:.78rem; max-width:440px; line-height:1.45; margin:0 0 1rem; }
+  h3.sec{ color:var(--gold); font-weight:400; font-size:.8rem; letter-spacing:.08em; margin:1.2rem 0 .4rem; width:100%; max-width:440px; text-align:left; }
+  #hud{ position:absolute; top:0; left:0; right:0; display:flex; justify-content:space-between; padding:.65rem .85rem; padding-top:max(.65rem, env(safe-area-inset-top)); z-index:5; pointer-events:none; background:linear-gradient(180deg, rgba(9,8,15,.96), transparent); }
+  #chapter-label{ color:var(--moon-dim); font-size:.7rem; font-style:italic; }
+  #meta{ display:flex; flex-direction:column; align-items:flex-end; gap:.18rem; }
+  .meta-row{ display:flex; align-items:center; gap:.3rem; }
+  .meta-label{ color:var(--moon-dim); font-size:.62rem; }
+  .dots{ display:flex; gap:3px; }
+  .dot{ width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,.15); }
+  .dot.on-heat{ background:var(--heat); }
+  .dot.on-trust{ background:var(--ember); }
+  .dot.on-filth{ background:var(--filth); }
+  #dialogue{ position:absolute; left:0; right:0; bottom:0; z-index:10; padding:0 3%; padding-bottom:max(.35rem, env(safe-area-inset-bottom)); }
+  #box{ background:linear-gradient(180deg, rgba(28,24,41,.2), var(--panel) 14%); border-top:1px solid rgba(184,149,80,.4); padding:.85rem .95rem 1.05rem; max-height:50vh; overflow-y:auto; }
+  #speaker{ display:inline-block; color:var(--gold); font-style:italic; font-size:.95rem; margin-bottom:.3rem; }
+  #text{ color:var(--moon); font-size:1.06rem; line-height:1.52; }
+  #tap-hint{ position:absolute; right:.9rem; bottom:.45rem; color:var(--moon-dim); font-size:.68rem; font-style:italic; opacity:.6; }
+  #choices{ display:none; flex-direction:column; gap:.5rem; margin-top:.65rem; }
+  #choices.show{ display:flex; }
+  .choice-btn{ background:rgba(20,18,31,.8); border:1px solid rgba(184,149,80,.5); color:var(--moon); font-family:inherit; font-size:.95rem; text-align:left; padding:.85rem 1rem; cursor:pointer; border-radius:3px; }
+  #click-catcher{ position:absolute; inset:0; z-index:8; pointer-events:none; }
+  #click-catcher.on{ pointer-events:auto; }
+  #back-menu{ position:absolute; top:max(.55rem, env(safe-area-inset-top)); left:.7rem; z-index:20; background:transparent; border:0; color:var(--moon-dim); font-family:inherit; font-size:.75rem; cursor:pointer; display:none; }
+</style>
+</head>
+<body>
+<div id="frame">
+  <div id="title-card">
+    <h1>Sombra Entre Mundos</h1>
+    <p>extras íntimos · Ma × Rem</p>
+    <button type="button" class="gold" id="start-btn">abrir extras</button>
+  </div>
+  <div id="menu-card">
+    <h1>Noites que a mansão não conta</h1>
+    <p class="sub">devagar. depois o resto.</p>
+    <p class="warn">Onze noites. Toque abrir extras. O I destranca o resto.</p>
+    <div id="extra-list"></div>
+    <button class="gold" id="reset-progress" style="margin-top:1.2rem">esquecer o que já leu</button>
+  </div>
+  <button id="back-menu">← extras</button>
+  <div id="scene"><div class="bg" id="bg"></div><img id="cg" alt=""></div>
+  <div id="vignette"></div>
+  <div id="hud">
+    <div id="chapter-label"></div>
+    <div id="meta">
+      <div class="meta-row"><span class="meta-label">calor</span><div class="dots" id="heat-dots"></div></div>
+      <div class="meta-row"><span class="meta-label">confiança</span><div class="dots" id="trust-dots"></div></div>
+      <div class="meta-row"><span class="meta-label">imundície</span><div class="dots" id="filth-dots"></div></div>
+    </div>
+  </div>
+  <div id="click-catcher"></div>
+  <div id="dialogue">
+    <div id="box">
+      <span id="speaker"></span>
+      <div id="text"></div>
+      <div id="choices"></div>
+      <div id="tap-hint">toque para continuar</div>
+    </div>
+  </div>
+  <div id="end-card">
+    <h2 id="end-title">Fim deste extra</h2>
+    <p id="end-body"></p>
+    <button class="gold" id="end-back">voltar aos extras</button>
+  </div>
+</div>
+<script src="./extras-a.js"></script><script src="./extras-b.js"></script>
+</body></html>
