@@ -45,8 +45,8 @@
   .dot.on-heat{ background:var(--heat); }
   .dot.on-trust{ background:var(--ember); }
   .dot.on-filth{ background:var(--filth); }
-  #dialogue{ position:absolute; left:0; right:0; bottom:0; z-index:10; padding:0 3%; padding-bottom:max(.35rem, env(safe-area-inset-bottom)); }
-  #box{ background:linear-gradient(180deg, rgba(28,24,41,.2), var(--panel) 14%); border-top:1px solid rgba(184,149,80,.4); padding:.85rem .95rem 1.05rem; max-height:50vh; overflow-y:auto; }
+  #dialogue{ position:absolute; left:0; right:0; bottom:0; z-index:10; padding:0; height:52%; padding-bottom:env(safe-area-inset-bottom); }
+  #box{ background:linear-gradient(180deg, rgba(28,24,41,.65), var(--panel) 12%); border-top:1px solid rgba(184,149,80,.4); padding:1rem 1.05rem 1.7rem; height:100%; max-height:none; overflow-y:auto; }
   #speaker{ display:inline-block; color:var(--gold); font-style:italic; font-size:.95rem; margin-bottom:.3rem; }
   #text{ color:var(--moon); font-size:1.06rem; line-height:1.52; }
   #tap-hint{ position:absolute; right:.9rem; bottom:.45rem; color:var(--moon-dim); font-size:.68rem; font-style:italic; opacity:.6; }
@@ -110,7 +110,7 @@ const CATALOG = [
   {id:"e8", title:"VIII. A ponta que não entra", blurb:"Anal que falha. Cura. Tenta de novo só um pouco.", unlock:7, sec:"agora"},
   {id:"e9", title:"IX. A mansão fala baixo", blurb:"Ram fiscal. Emilia inocente. Betty e o silêncio.", unlock:8, sec:"agora"},
   {id:"e10", title:"X. O que a magia faz no corpo", blurb:"Leite. Inflar. Humilhação só no quarto.", unlock:9, sec:"agora"},
-  {id:"e11", title:"XI. Sopa e a colher certa", blurb:"Aftercare longo. O que fica para depois.", unlock:10, sec:"agora"},
+  {id:"e11", title:"XI. Sopa e a colher certa", blurb:"Louça. Caldo. O que fica para depois.", unlock:10, sec:"agora"},
   {id:"p12", title:"XII. Cio de verdade (plano)", blurb:"Breeding, calor que não cabe no jantar.", unlock:99, sec:"depois"},
   {id:"p13", title:"XIII. Água que não é cura (plano)", blurb:"Xixi de verdade, barriga o dia inteiro.", unlock:99, sec:"depois"},
   {id:"p14", title:"XIV. O que não se lava (plano)", blurb:"Cocô, vômito, engolir, aftercare pesado.", unlock:99, sec:"depois"},
@@ -123,43 +123,50 @@ const CHAPTERS = {};
 
 CHAPTERS.e1 = {
   label:"I — A porta",
-  end:"Ninguém gozou. Rem voltou para o colchão de empregada antes do galo. O laço amanheceu certo. O peito não.",
+  end:"Ninguém gozou. Rem voltou para o colchão de empregada antes do galo, laço certo, boca com gosto de cebola e de alguém.",
   beats:[
-    {s:"night", sp:"", t:"A vela da cozinha morre. Rem seca a tigela duas vezes. Nee-sama já dormiria — ou fingiria. Rem não é Nee-sama. Rem é a que lava de novo quando já está limpo."},
-    {s:"night", sp:"Rem", t:"— Se Nee-sama visse Rem parada neste corredor, Nee-sama riria. Ou zangaria. As duas doem."},
-    {s:"night", sp:"", t:"O quarto de visitas fede a fogo baixo. Rem encosta a testa na madeira. Não porque é corajosa. Porque o pé não vira para trás."},
-    {s:"night", sp:"Ma", t:"— Pode entrar. Eu já... senti você. Três portas atrás."},
-    {s:"night", sp:"Rem", t:"— Rem pede desculpa. Rem não veio buscar bandeja."},
-    {s:"night", sp:"Ma", t:"— Eu sei."},
-    {s:"kiss", sp:"", t:"Camisola. Chifres pequenos. Escamas com suor. Rem faz uma reverência inútil, como se etiqueta salvasse o que ela veio fazer."},
-    {s:"kiss", sp:"Rem", t:"— Rem está com medo. Rem também está... alegre. Nee-sama diria que Rem mistura as coisas. Nee-sama acertaria."},
-    {s:"kiss", sp:"Ma", t:"— Senta. Não precisa de avental agora."},
-    {s:"kiss", sp:"Rem", t:"— Rem precisa. Rem é isso. Mas... pode sentar um pouco."},
-    {s:"kiss", sp:"", t:"Um palmo de colcha. Relógio da sala. Rem olha a mão de Ma como olha faca: com respeito e fome."},
-    {s:"kiss", sp:"Rem", t:"— Posso o ombro. Só o ombro. Rem promete. Rem é ruim de promessa."},
-    {s:"kiss", sp:"", t:"Escama quente. Pelo no colo da camisola. Cheiro azedo de dia inteiro — sovaco, virilha, um fundo que Rem não sabe nomear. Careta de verdade."},
-    {s:"kiss", sp:"Rem", t:"— Forte. Rem deveria sair. Rem não sai."},
-    {s:"kiss", sp:"Ma", t:"— O calor fede. Eu lavo. O corpo não escuta."},
-    {s:"kiss", sp:"Rem", t:"— Rem não pediu desculpa do cheiro. Rem pediu para ficar."},
-    {s:"kiss", sp:"", t:"O beijo é ruim. Dente. Cebola da sopa. Mão de Rem no joelho de Ma como cabo de vassoura."},
-    {s:"kiss", sp:"Ma", t:"— Sua boca é chá. E cebola."},
-    {s:"kiss", sp:"Rem", t:"— Ma-san não precisava falar da cebola."},
-    {s:"kiss", sp:"Ma", t:"— Precisava. Senão eu minto."},
-    {s:"kiss", sp:"Rem", t:"— ...Rem gosta quando Ma-san não mente. Mesmo assim."},
-    {s:"kiss", sp:"", t:"Saliva no queixo. Rem lambe o próprio pulso. Faz cara feia. Não sai."},
-    {s:"night", sp:"Rem", t:"— Ma-san tem pelinhos. Rem também. Rem raspava por causa do uniforme. Hoje Rem não raspou. Se Nee-sama visse..."},
-    {s:"night", sp:"Ma", t:"— Se Ram visse, eu também sumia."},
-    {s:"night", sp:"Rem", t:"— Nee-sama pode ver Rem. Nee-sama não pode... ficar olhando Ma-san assim. Rem não sabe por quê. Rem sabe."},
+    {s:"night", sp:"", t:"A vela da cozinha morre num fio de fumaça azulada. O pavio chia. Rem seca a mesma tigela pela segunda vez. O barro já está opaco, sem uma gota. O pano de prato é que não sabe parar: vai e volta no fundo, no bordo, no fundo de novo. O cheiro que sobra é de cebola frita há horas, de gordura fria, de pedra molhada."},
+    {s:"night", sp:"", t:"Do corredor dos fundos vem o tique do relógio da sala, abafado. Uma tábua estala. Nee-sama já estaria deitada, ou fingindo, o que para Nee-sama é quase o mesmo ofício. Rem não é Nee-sama. Rem é a que lava quando já está limpo, a que conta lençol duas vezes, a que agora está com a testa quente demais para uma noite comum."},
+    {s:"night", sp:"Rem", t:"— Se Nee-sama visse Rem parada neste corredor, Nee-sama riria. Ou zangaria. As duas doem. Rem mesmo assim está parada. O pé não vira. Rem pediu ao pé. O pé não escutou."},
+    {s:"night", sp:"", t:"O quarto de visitas fede antes mesmo da porta: cera barata, fogo baixo, suor velho de quem passou o dia inteiro sem se atrever a abrir a janela. Madeira escura. Maçaneta fria. Rem encosta a testa nela e sente o metal puxar o calor da pele. Levanta a mão. Abaixa. Os nós dos dedos, na terceira vez, mal tocam. O som é ridículo, um petisco de osso. Rem odeia o som. Rem não foge."},
+    {s:"night", sp:"Ma", t:"— P-pode... pode entrar. Eu já senti você. Três portas atrás. O chifre formigou. Eu não abri porque a mão não ia. Está... está tremendo. Desculpa. Entra. Se quiser. A porta continua aí se não quiser."},
+    {s:"night", sp:"", t:"Ma está na beira da cama, pés no assoalho escuro. A camisola é vinho gasto, um pouco larga no colo, grudada no ombro esquerdo onde as escamas vermelhas aparecem como pedrinhas quentes. Os chifres pequenos estão baixos, quase pedindo desculpa por existir. As asas, fechadas, tremem uma vez contra o linho e param. O cabelo escuro está preso torto. Tem uma mecha grudada na têmpora, de suor."},
+    {s:"night", sp:"Rem", t:"— Rem pede desculpa. Rem não veio buscar bandeja. Rem também não sabe o nome do que veio buscar. Rem está com o avental. Rem precisava do avental para não... sumir."},
+    {s:"night", sp:"", t:"O avental é o de sempre: linho grosso, laço nas costas puxado demais, uma mancha clara de farinha no quadril esquerdo que Rem não viu. O vestido azul-escuro está úmido nas costas, onde o cabelo azul-claro gruda em mechas finas. O chifre de Rem pega a luz da vela num ponto só; ela abaixa a cabeça para o chifre não parecer tão grande. Ma repara nisso e puxa o próprio cabelo torto para a frente dos chifres pequenos, como se os dois pudessem se esconder um no outro."},
+    {s:"night", sp:"Ma", t:"— Seu laço está honesto demais para esta hora. O meu cabelo não. Eu... olhei o seu chifre e fiquei com vergonha do meu. O meu é menor. Eu sei que isso é besteira. Mesmo assim escondi."},
+    {s:"night", sp:"Rem", t:"— Rem gosta do menor. Rem gosta do torto. Rem abaixou a cabeça porque o de Rem é de oni de serviço e de noite ele parece... demais. Se Ma-san olhar com nojo, Rem ajeita o laço e sai. Se Ma-san olhar com isto, Rem fica. Rem está pedindo as duas coisas ao mesmo tempo."},
+    {s:"night", sp:"Ma", t:"— Pode sentar. Longe, se quiser. Perto, se aguentar o cheiro. Eu lavei o cabelo. O corpo não escutou. Eu... se você abrir a janela, eu fico. Não vou achar que você está fugindo."},
+    {s:"night", sp:"", t:"Rem senta. Um palmo de colcha entre os joelhos. O tecido é grosso, um pouco áspero, cheira a baú. O relógio da sala marca alguma coisa que ela não conta. A mão de Ma está no colo, dedos curtos, unha roída num canto. Rem olha essa mão como olha faca: respeito, fome, medo de cortar no lugar errado."},
+    {s:"night", sp:"Rem", t:"— Posso o ombro. Só o ombro. Rem promete. Rem é ruim de promessa. Ma-san pode falar para Rem parar. Rem escuta. Mesmo se a mão não quiser escutar. O avental range quando ela se inclina. O chifre dela chega perto demais do de Ma; as duas desviam ao mesmo tempo e os chifres se tocam no desvio — osso quente, um clique baixo. Rem solta um ah de susto. Ma também. Nenhuma afasta o ombro."},
+    {s:"night", sp:"Ma", t:"— Pode. Se eu falar baixo demais, é vergonha. Não é para você ignorar. Eu também não sei onde pôr a minha. A camisola vinho sobe um pouco no colo quando ela respira. Rem vê o pelo fino. Ma vê que Rem viu e puxa o tecido para cima, atrasada, vermelha até a escama."},
+    {s:"night", sp:"", t:"A palma de Rem pousa na camisola, em cima da escama. Quente demais para quarto frio — cio, não lareira. A escama é lisa no meio e áspera na borda. Por baixo do vinho há pelo fino no colo, mais escuro que o cabelo de Ma. O cheiro que sobe é dela: febril, um pouco adocicado de fumaça baixa, azedo na raiz, quarto fechado, cera barata, um fio de sovaco que o balde não alcançou. Não é suor de serviço. É Ma. O nariz de Rem franze. A boca enche de água. A mão de Rem, no ombro, ainda cheira a bacia e a cebola; as duas coisas se misturam e ficam piores juntas."},
+    {s:"night", sp:"Rem", t:"— Forte. Rem deveria sair. Rem não sai. Rem está com nojo. Rem também está feliz. Nee-sama diria que Rem mistura as coisas. Nee-sama acertaria. Rem mistura. A voz dela falha no mistura. Ma ouve a falha e não ri. Aperta o canto do avental, só o pano, como quem segura prato."},
+    {s:"night", sp:"Ma", t:"— O calor fede. Eu sei. Desculpa. Você pode só ficar com a mão aí. Não precisa beijar nada. Eu já fico diferente se a mão ficar. Diferente sai baixo, quase no nariz. As asas se mexem. Rem sente o couro no pulso e não tira a palma."},
+    {s:"night", sp:"", t:"Elas se olham tempo demais. A vela estala. Ma desvia primeiro, orelha vermelha até a raiz. Rem desvia depois, porque alguém tinha que perder. No meio do desvio as bocas se encontram tortas: dente, lábio de baixo, gosto de cebola da sopa que Rem jurou que já tinha ido embora, gosto de chá velho na de Ma."},
+    {s:"night", sp:"Ma", t:"— Sua boca é chá. E cebola. Desculpa. Eu não ia falar. Falei. O dente também foi meu. Eu... posso tentar de novo? Mais devagar. Eu conto até três. Se no três eu não for, é porque a coragem morreu."},
+    {s:"night", sp:"Rem", t:"— Rem também conta. Rem é melhor em contar tigela. Mesmo assim conta. No um o chifre de Rem pega a vela. No dois a asa de Ma range o linho. Rem ouve o range e conta mais devagar, porque o som dela também é demais."},
+    {s:"night", sp:"", t:"No dois elas já estão se beijando. Ainda torto. Melhor. A língua de Ma é quente e tímida, mal passa do lábio. A de Rem vai um pouco além e volta, assustada de si mesma. Saliva escorre para o queixo de Ma; uma gota para na escama e brilha. A mão de Rem no joelho dela — tecido da camisola, calor subindo pela coxa, um pelo mais grosso onde a barra já subiu um dedo sem ninguém puxar."},
+    {s:"night", sp:"Ma", t:"— Espera. Só um. Se você descer a mão agora eu vou fazer um barulho. A parede é fina. Eu ouvi Nee-sama tossir há pouco. Foi tosse de quem finge que não escuta. Eu acho. Eu tenho medo de achar."},
+    {s:"night", sp:"Rem", t:"— Rem ouviu também. Rem deixa a mão no joelho. Rem quer descer. Rem deixa no joelho. Rem aperta um pouco. Só um pouco. O osso é quente."},
+    {s:"night", sp:"", t:"Quando Rem aperta, a tábua da cama range um chiado curto. Ma solta um som no nariz — não é gemido de livro, é medo com tesão, um fio de voz que ela tenta engolir e não dá. Rem ouve e aperta menos, depois mais, porque o som a assusta e a puxa. As asas de Ma batem uma vez no linho: couro em pano, um tapinha mole. Rem sobressalta. Ma sussurra desculpa para a asa, como se a asa fosse uma terceira pessoa."},
+    {s:"night", sp:"", t:"Rem lambe o próprio pulso por reflexo de empregada, gosto de saliva e de pele de Ma, faz cara feia, não sai. Ma ri um riso sem som e esconde a boca na palma. Os ombros dela sobem. As asas se mexem de leve, um couro quente contra o linho."},
+    {s:"night", sp:"Rem", t:"— Ma-san tem pelinhos. Rem viu no colo da camisola. Rem também tem. Rem raspava por causa do uniforme. Hoje Rem não raspou. Se Nee-sama visse o pelo de Rem, Nee-sama falaria de higiene. Rem não raspou de propósito. Rem não vai falar que foi de propósito."},
+    {s:"night", sp:"Ma", t:"— Se Ram visse eu sumia por baixo da cama. Eu também não apareci limpa de livro. Tive vergonha de pedir banho de novo. Frederica-san já me olhou estranho de manhã, no balde. Eu fiquei vermelha até a asa."},
+    {s:"night", sp:"Rem", t:"— Nee-sama pode ver Rem. Nee-sama não pode ficar olhando Ma-san assim. Rem não sabe por quê. Rem sabe. Rem é feia por dentro. Rem pensa isso e mesmo assim pensa."},
+    {s:"night", sp:"Ma", t:"— Eu também pensei quando Emilia-sama acenou no jardim. Aí fiquei com vergonha de ter pensado. A gente é duas vergonhas no mesmo colchão. Isso... me deixa menos sozinha. É idiota."},
     {s:"night", sp:"", t:"choices", choices:[
-      {label:"Deixar Ma erguer a saia só um pouco", flag:"confianca"},
-      {label:"Pedir para ver Ma primeiro. Rem é covarde", flag:"calor"}
+      {label:"Pedir para Ma erguer a saia de Rem só até o meio da coxa. As duas olham. Ninguém toca o meio.", flag:"confianca"},
+      {label:"Pedir para Ma abrir dois botões da camisola. Rem olha. Rem não encosta ainda.", flag:"calor"}
     ]},
-    {s:"night", sp:"", t:"{confianca:A saia sobe até a metade da coxa. Pelos pretos, úmidos, um cheiro de sabão que não venceu o do dia. Ma não toca o meio. Rem também não — ainda não sabe o que faria se tocasse.}{calor:A camisola abre. O pau pequeno dorme num tufo escuro. Tem um branco-amarelado na dobra da cabeça. Cheiro de virilha fechada. Rem tapa o nariz e não anda para trás.}"},
-    {s:"night", sp:"Rem", t:"— Não é livro. É vivo. Rem está vermelha. Rem quer que Nee-sama nunca saiba. Rem também quer voltar amanhã."},
-    {s:"night", sp:"", t:"Passos no corredor. As duas congelam. Ram bufa, não para. Rem ri no ombro de Ma, minúscula, culpada."},
-    {s:"night", sp:"Rem", t:"— Nee-sama sempre sabe. Rem vai levar bronca e voltar mesmo assim."},
-    {s:"night", sp:"Ma", t:"— Dorme aqui um pouco. Só a mão. O resto a gente não sabe ainda."},
-    {s:"night", sp:"Rem", t:"— Rem gosta quando Ma-san fala como se Rem merecesse tempo. Nee-sama merece tudo. Rem... quer um pedaço. Só de Ma-san. Não de outra pessoa. Rem falou demais."}
+    {s:"night", sp:"", t:"{confianca:A saia sobe devagar, tecido grosso raspando a pele. No meio da coxa o pelo é preto, úmido na raiz, cheiro de sabão que não venceu o dia. O meio está ali, escuro, fechado, um fio brilhando. Ma segura a barra com as duas mãos, tremendo. Rem conta os cílios dela para não olhar o meio. Olha mesmo assim. As duas sabem.}{calor:Dois botões. A camisola abre um V pequeno. O pau dorme num tufo escuro, pequeno, um pouco à esquerda. Na dobra da cabeça tem um branco-amarelado grudado. Cheiro de virilha fechada sobe quente. Rem tapa o nariz. Ma tapa o pau com a palma. As duas riem sem barulho, horrorizadas, presas no mesmo quarto.}"},
+    {s:"night", sp:"Rem", t:"— Não é livro. É vivo. Rem está vermelha até o chifre. Rem quer que Nee-sama nunca saiba. Rem também quer voltar amanhã. Rem fala demais quando gosta. Rem vai calar a boca no ombro, se Ma-san deixar."},
+    {s:"night", sp:"Ma", t:"— Deixa. Volta. Mesmo se for só para sentar longe. Eu durmo melhor se souber que a porta pode abrir de novo. Isso também é demais para uma noite. Eu falei mesmo assim."},
+    {s:"night", sp:"", t:"Passos no corredor. Tábua conhecida. As duas congelam. A mão de Rem aperta o joelho de Ma até doer. Ram bufa do outro lado da madeira — um sopro de quem sentiu cheiro e decidiu não nomear. A tosse dela vai embora com o passo preguiçoso. O silêncio depois é pior."},
+    {s:"night", sp:"Rem", t:"— Nee-sama sempre sabe. Rem vai levar bronca. Rem vai voltar mesmo assim. Rem é empregada. Rem também é isto. As duas coisas não cabem no mesmo avental. Rem força."},
+    {s:"night", sp:"Ma", t:"— Dorme um pouco. Só a mão. O resto a gente não sabe ainda. Eu tenho medo de estragar se souber tudo numa noite. Pode... pode ajeitar o laço. Eu gosto quando você ajeita. Parece que alguém escolheu ficar."},
+    {s:"night", sp:"", t:"Elas deitam de lado. Um palmo ainda entre os peitos. Rem ajeita o laço no escuro, por mania, o tecido um pouco úmido de suor na nuca. Ma puxa o cobertor até o queixo das duas. O cheiro continua. Ninguém abre a janela. A vela morre sozinha."},
+    {s:"night", sp:"Rem", t:"— Rem gosta quando Ma-san fala como se Rem merecesse tempo. Nee-sama merece tudo. Rem quer um pedaço. Só de Ma-san. Não de outra pessoa. Rem falou demais. Rem vai calar a boca no ombro."},
+    {s:"night", sp:"Ma", t:"— Pode calar no ombro. Eu fico acordada mais um pouco. Se você dormir primeiro, eu conto a respiração. É o que eu sei fazer quando tenho medo de que a porta não abra de novo."}
   ]
 };
 
@@ -167,117 +174,125 @@ CHAPTERS.e2 = {
   label:"II — A lista",
   end:"A lista foi para o bolso do avental. Ram encontrou um canto rasurado e não comentou. Ainda.",
   beats:[
-    {s:"night", sp:"", t:"Café. Rem não derrama. Quase. Ram repara o 'quase' e guarda na boca."},
+    {s:"night", sp:"", t:"Café. A xícara de Nee-sama não treme. A de Rem treme um milímetro e a superfície escura quebra o reflexo da janela. Cheiro de grão queimado um pouco, de pão, de manhã que finge que a noite não existiu. Ram repara o quase e guarda na boca."},
     {s:"night", sp:"Ram", t:"— A irmã mais nova dormiu mal. Ram também. A parede é fina. Ram não perguntou."},
-    {s:"night", sp:"Rem", t:"— Rem pede desculpa, Nee-sama."},
-    {s:"night", sp:"Ram", t:"— Rem pede desculpa até do clima. Cansativo."},
-    {s:"night", sp:"", t:"No pátio, Emilia acena para Ma demais. Rem conta os lençóis duas vezes. Perde a conta."},
-    {s:"night", sp:"Rem", t:"— Emilia-sama é gentil. Rem sabe. Rem mesmo assim... não gosta do aceno. Rem é feia por dentro hoje."},
-    {s:"night", sp:"Ma", t:"— Eu acenei de volta por educação. Só."},
-    {s:"night", sp:"Rem", t:"— Rem acredita. Rem quer acreditar. Rem vai dobrar o lençol agora."},
-    {s:"night", sp:"Ma", t:"— Tem papel no seu avental."},
-    {s:"night", sp:"Rem", t:"— Lista. Coisas que Rem gosta quando Ma-san faz sem saber. Não é quarto. Ainda. Se fosse Nee-sama escrevendo, a letra saía direita."},
-    {s:"kiss", sp:"Rem", t:"— Um: cabeça. Dois: voz baixa. Três: chifres. Quatro: pescoço, mesmo fedido. Cinco: mão no ombro depois do serviço. Seis estava riscado."},
-    {s:"kiss", sp:"Ma", t:"— O seis."},
-    {s:"kiss", sp:"Rem", t:"— Peito. Rem teve vergonha da letra. Sete também. Rem não vai falar o sete no jardim."},
-    {s:"kiss", sp:"Ma", t:"— Qual é o sete."},
-    {s:"kiss", sp:"Rem", t:"— ...Que Ma-san não deixe outra pessoa chegar tão perto. Rem sabe que é feio. Rem escreveu mesmo assim."},
-    {s:"kiss", sp:"Ma", t:"— Está escrito nas duas direções."},
-    {s:"kiss", sp:"", t:"Rem no chão entre os joelhos de Ma. Mão no cabelo. Rem fecha o olho."},
-    {s:"kiss", sp:"Rem", t:"— Mais. Por favor. Rem fala demais quando gosta."},
-    {s:"kiss", sp:"", t:"Boca no antebraço. Suor. Careta. Beijo."},
+    {s:"night", sp:"Rem", t:"— Rem pede desculpa, Nee-sama. A voz sai pequena. O café treme. Nee-sama olha o laço — honesto, puxado demais, como quem vestiu no escuro. Rem sente o olhar no laço e no chifre. Não fala do quarto."},
+    {s:"night", sp:"Ram", t:"— Rem pede desculpa até do clima. Cansativo. Come. Antes que esfrie e Ram tenha que ouvir desculpa de sopa fria também."},
+    {s:"night", sp:"", t:"No pátio o sol é idiota de tão limpo. Lençol branco estala no varal. Emilia acena para Ma com as duas mãos, cabelo prata ao vento, como se aceno fosse abraço. Rem conta os lençóis. Perde a conta no sete. Recomeça. O papel no bolso do avental arranha o quadril cada vez que ela se curva."},
+    {s:"night", sp:"Rem", t:"— Emilia-sama é gentil. Rem sabe. Rem mesmo assim não gosta do aceno. Rem é feia por dentro hoje. Rem vai dobrar direito mesmo assim. Se Ma-san ficar perto, Rem dobra torto. Ma-san pode ficar um pouco torto."},
+    {s:"night", sp:"Ma", t:"— Eu acenei de volta por educação. Só. Depois fiquei olhando você contar. Achei que se eu olhasse Emilia-sama você ia parar de contar. Eu não queria isso. Eu... também escrevi um sete. No verso de uma conta. Queimei. Foi burro."},
+    {s:"night", sp:"Rem", t:"— Rem acredita. Rem quer acreditar. Tem papel no avental. Ma-san viu o canto. Rem sabe. Rem não rasgou."},
+    {s:"kiss", sp:"Rem", t:"— Um: cabeça. Quando Ma-san abaixa a voz. Dois: voz baixa. Três: chifres. Quatro: pescoço, mesmo fedido. Cinco: mão no ombro depois do serviço. Seis estava riscado. A letra do seis saiu feia."},
+    {s:"kiss", sp:"Ma", t:"— O seis. Pode falar. Se for demais eu cubro o rosto. Não vou embora. O varal é parede. Parede idiota. Melhor que nenhuma."},
+    {s:"kiss", sp:"Rem", t:"— Peito. Rem teve vergonha da letra. Sete também. Rem não fala o sete no jardim. O jardim tem orelha. O sete é... que Ma-san não deixe outra pessoa chegar tão perto. Rem sabe que é feio. Rem escreveu mesmo assim."},
+    {s:"kiss", sp:"Ma", t:"— Está escrito nas duas direções. O meu sete era que você não servisse chá para outra e ficasse olhando o chão. Fiquei com vergonha de ter escrito isso sobre Emilia-sama. Mesmo assim escrevi. Depois queimei. A cinza ficou na unha."},
+    {s:"kiss", sp:"", t:"Elas se escondem atrás do lençol grande. Luz filtrada, cheiro de sabão de goma e de sol em pano. Rem ajoelha entre os joelhos de Ma porque o corpo pede chão. O joelho direito dói um pouco na pedra. A saia de Ma, de trabalho, está um pouco suja de terra no baixo."},
+    {s:"kiss", sp:"Rem", t:"— Mais. A mão. No cabelo. Por favor. Sem desfazer o laço... pode desfazer um pouco. Rem ajeita depois. Rem fala demais quando gosta. Rem sabe. Rem não para."},
+    {s:"kiss", sp:"", t:"Os dedos de Ma se perdem no azul, desfazem o laço um dedo, pedem desculpa no silêncio, ajeitam, desfazem de novo. Unha roída no couro cabeludo. Rem fecha o olho. Um som sai do peito, baixo, que não é de serviço. O lençol bate no ombro delas, quente de sol."},
+    {s:"kiss", sp:"Ma", t:"— Foi alto? Eu achei alto. Espera. Só o antebraço. Se o gosto for ruim você cospe no pano. Eu lavo depois. Pode cuspir. Eu não vou achar que é nojo de mim. É nojo do dia. Eu também tenho."},
+    {s:"kiss", sp:"", t:"Boca no antebraço de Ma. O gosto é cio + pedra da mansão: sal grosso, azedo de quem não levantou o braço o dia inteiro, pelo curto raspando o dente. Rem faz careta de verdade — o estômago sobe. Ma vê a careta e esconde o rosto no lençol, orelha vermelha no branco. Rem beija em cima da careta para dizer que a careta não é saída. Ma ri um riso molhado, nojenta de si, aliviada da boca que voltou."},
     {s:"kiss", sp:"", t:"choices", choices:[
-      {label:"Axila por cima da manga", flag:"confianca"},
-      {label:"Pé. Rem sabe ser empregada até nisso", flag:"calor"}
+      {label:"Pedir a axila por cima da manga. Só o tecido. Só um pouco.", flag:"confianca"},
+      {label:"Pedir o pé. Rem sabe ser empregada até nisso. Ma deixa, vermelha.", flag:"calor"}
     ]},
-    {s:"kiss", sp:"", t:"{confianca:Braço no ar. Ma ri no tecido e beija. Rem solta um som que não é de serviço.}{calor:Um sapato. Pé quente, pelo no dorso. Gosto de couro. Rem beija o arco e depois limpa a boca no avental.}"},
-    {s:"night", sp:"Ma", t:"— O seis. Por cima. Eu paro no onze."},
-    {s:"night", sp:"Rem", t:"— Rem ia parar no dez. Rem mentiu no nove."},
-    {s:"night", sp:"", t:"Palma no seio pelo avental. Rem conta baixo. Aftercare: água, cobertor, beijo na testa que dura um segundo a mais do que etiqueta."},
-    {s:"night", sp:"Rem", t:"— Amanhã isto é lista de compras. Nee-sama não acredita em nabo às duas da manhã. Mesmo assim."},
-    {s:"night", sp:"Ma", t:"— Não aceno de novo sem te avisar."},
-    {s:"night", sp:"Rem", t:"— ...Rem vai tentar não contar o aceno. Rem provavelmente vai contar."}
+    {s:"kiss", sp:"", t:"{confianca:O braço sobe. Por baixo da manga de trabalho de Ma o sovaco está escuro de umidade: não é perfume, é cio preso o dia inteiro mais o cheiro baixo de escama quente, um pouco de fumaça doce que Ma carrega no ombro. Rem encosta o nariz no tecido primeiro. A náusea sobe rápida, saliva demais. Ela pensa em Nee-sama dobrando lençol e mesmo assim abre a boca no pano. O gosto é salgado-azedo, grosso, gruda no céu da boca como caldo que ficou na panela. Ma faz um som de nojo de si mesma e não abaixa o braço.}{calor:O sapato de Ma é o de andar na pedra da mansão, sola gasta, couro que puxou o chão da cozinha e um pouco de cinza da lareira do quarto de visitas. Por dentro a meia está úmida. O pé tem pelo escuro no dorso, mais grosso no dedão; entre os dedos está branco-úmido de dia fechado. Rem beija o arco. O gosto é couro, sal de cio e um fundo que ela só conhece de esfregar chão — mas é de Ma, mais quente, quase febril. A náusea vem. Ela limpa a boca no avental e o avental agora fede a pé de Ma. Ma tapa a cara. — Isso é nojento. É meu. Não para ainda.}"},
+    {s:"night", sp:"Ma", t:"— O seis. Por cima do avental. Eu paro se você pedir. Eu não sei parar sozinha se você não pedir. Isso me assusta um pouco. Avisa no oito. Ou no nove. Eu perco a conta."},
+    {s:"night", sp:"Rem", t:"— Rem ia parar no dez. Rem mentiu no nove. Rem quer a palma. Rem conta. Se passar de doze Rem para mesmo. Rem é ruim de parar. Rem tenta."},
+    {s:"night", sp:"", t:"A palma de Ma pousa no seio pelo avental. Tecido grosso, costura, o calor passando mesmo assim. Rem conta baixo, perde o quatro, recomeça. No onze as duas param, testas juntas, respiração feia, o lençol batendo como aplauso de alguém que não existe."},
+    {s:"night", sp:"", t:"Depois não é tesão. É o copo na pedra que Rem sempre deixa para Ma. Água morna de sol. É o cobertor do quarto de visitas, puxado até o ombro. É Rem ajeitando o laço que a mão desfez, dedo por dedo, puxando o laço até ficar honesto. É um beijo na testa que dura um segundo a mais do que etiqueta. As duas sentem o segundo extra como crime."},
+    {s:"night", sp:"Rem", t:"— Amanhã isto é lista de compras. Nee-sama não acredita em nabo às duas da manhã. Mesmo assim Rem vai escrever nabo. Rem é covarde. Rem é constante."},
+    {s:"night", sp:"Ma", t:"— Não aceno de novo sem te avisar. Se eu esquecer, puxa a manga. Eu gosto quando você puxa a manga. Isso também era da lista. Eu não falei. Falei agora. Desculpa."},
+    {s:"night", sp:"Rem", t:"— Rem vai tentar não contar o aceno para Nee-sama. Rem provavelmente vai contar. Rem pede desculpa adiantado. Nee-sama guarda. Rem sabe."}
   ]
 };
 
 CHAPTERS.e3 = {
   label:"III — Passos",
-  end:"Ninguém viu. As duas lavaram as mãos como se fosse sangue. Era só saliva.",
+  end:"Ninguém viu. As duas lavaram as mãos na bacia da despensa como se fosse sangue. Era saliva. O pote sobreviveu.",
   beats:[
-    {s:"night", sp:"", t:"Despensa. Pote de geleia. Desculpa pronta. A porta não fecha direito — nunca fechou. Rem sabe. Esquece."},
-    {s:"kiss", sp:"Rem", t:"— Só um. Rem promete. Rem é péssima com promessa."},
-    {s:"kiss", sp:"", t:"Beijo melhor que o primeiro. Ainda torto. A mão de Ma na cintura. A de Rem no chifre, sem apertar."},
-    {s:"kiss", sp:"Rem", t:"— Assim. Só assim. Se alguém entrar, Rem... não sabe. Rem não quer que vejam Ma-san deste jeito. É de Rem. Isso é feio. Rem sabe."},
-    {s:"kiss", sp:"Ma", t:"— Também não quero que vejam você. Então a gente escuta."},
-    {s:"night", sp:"", t:"Madeira no corredor. Frederica. Voz de quem conta toalha."},
-    {s:"night", sp:"Frederica", t:"— Rem? A geleia da Emilia-sama não pode acabar de novo."},
-    {s:"night", sp:"", t:"Rem afasta Ma com força de oni, não de empregada. O pote cai. Não quebra. Quase."},
-    {s:"night", sp:"Rem", t:"— Aqui. Rem estava... alto. A prateleira."},
-    {s:"night", sp:"Frederica", t:"— ...O laço está torto. Ajeite antes da sala. Boa noite."},
-    {s:"night", sp:"", t:"A porta da despensa e o silêncio depois. Rem está branca. Ma também."},
-    {s:"night", sp:"Rem", t:"— Rem empurrou. Rem ia... Rem não ia. Rem empurrou. Frederica-san não pode ver. Ninguém pode."},
-    {s:"night", sp:"Ma", t:"— Você afastou. Só isso. Respira."},
+    {s:"night", sp:"", t:"Despensa. Cheiro de farinha seca, de tampa de pote, de madeira que nunca toma sol. A geleia da Emilia-sama está no alto, sempre no alto, como se prateleira fosse teste. A porta não fecha direito: um palmo de corredor preto. Rem sabe. Esquece, porque a boca de Ma está a um sopro."},
+    {s:"kiss", sp:"Rem", t:"— Só um. Rem promete. Rem é péssima com promessa. Se Frederica-san vier, Rem fala da prateleira. Nee-sama não acredita em prateleira. Frederica-san talvez. Rem vai rezar para isso. Rem não reza bem."},
+    {s:"kiss", sp:"Ma", t:"— Eu escuto o corredor. Se eu apertar seu braço, é para parar. Não é raiva. É medo. Eu aperto fraco. Me desculpa se não der tempo. Eu... também quero o um."},
+    {s:"kiss", sp:"", t:"O beijo é melhor que o da primeira noite. Ainda torto. A mão de Ma na cintura, por cima do avental, como se o tecido fosse lei. A de Rem no chifre, sem apertar, só encostada: calor, um formigamento baixo que ainda não é mana — é pele. Farinha no ar. Um grão na pálpebra de Rem."},
+    {s:"kiss", sp:"Rem", t:"— Assim. Só assim. Se alguém entrar, Rem não sabe. Rem não quer que vejam Ma-san deste jeito. É de Rem. Isso é feio. Rem sabe que é feio. Rem pensa mesmo assim. Rem aperta o chifre um pouco. Sem querer. Com querer."},
+    {s:"kiss", sp:"Ma", t:"— Também não quero que vejam você. Então a gente escuta. Eu escuto melhor se você não beijar o pescoço agora. ...Pode beijar um pouco. Baixo. O pescoço fede. Eu avisei."},
+    {s:"night", sp:"", t:"Madeira no corredor. Passo pesado-leve de quem conta toalha e canta baixo sem perceber. A voz de Frederica chega antes do corpo, doce, alta demais para despensa. O chifre de Rem lateja. A asa de Ma se abre um palmo e Ma a puxa de volta com um som de couro. Rem aperta o pulso dela: para. Ma aperta de volta: ouvi."},
+    {s:"night", sp:"Frederica", t:"— Rem? A geleia da Emilia-sama não pode acabar de novo. Você está aí?"},
+    {s:"night", sp:"", t:"Rem empurra Ma com força de oni, não de empregada. O ombro bate na prateleira. O pote cai, rola, não quebra — o vidro canta no chão e para no saco de farinha. O tampo fica torto. Ma tapa a própria boca com as duas mãos. Os olhos estão cheios. A asa esquerda está aberta um palmo, tremendo."},
+    {s:"night", sp:"Rem", t:"— Aqui. Rem estava... alto. A prateleira. Rem alcançou. A voz sai direita demais, de serviço. O laço está torto. Rem sabe. Não ajeita agora porque a mão ainda está na farinha e ajeitar seria confessar que a mão esteve em outro lugar."},
+    {s:"night", sp:"", t:"A porta abre um palmo. Luz de corredor. Frederica vê Rem, o pote, o laço torto. Não vê Ma, encolhida atrás do saco, farinha no cabelo como neve idiota. O nariz de Frederica trabalha um segundo a mais. Ela não nomeia."},
+    {s:"night", sp:"Frederica", t:"— O laço está torto. Ajeite antes da sala. E não suba nessa prateleira no escuro. Boa noite."},
+    {s:"night", sp:"", t:"A porta volta ao quase-fechado. O silêncio depois é pior: só o vidro do pote e a respiração das duas, fora de hora. Rem está branca até o lábio. Ma também, farinha no cílio. Um fio de geleia escorreu no vidro — doce de Emilia-sama no meio do medo. Rem odeia o doce agora. Ma vê o ódio e não comenta. Aperta o avental de Rem, só o pano, para dizer estou."},
+    {s:"night", sp:"Rem", t:"— Rem empurrou. Rem ia... Rem não ia. Rem empurrou. Frederica-san não pode ver. Ninguém pode. Rem está tremendo. Rem odeia tremer. O ombro dói. Rem merece a dor. Rem sabe que não é assim que dor funciona. Rem mesmo assim pensa."},
+    {s:"night", sp:"Ma", t:"— Você afastou. Só isso. Respira. Eu também ia tapar você se fosse ao contrário. Eu ia fazer barulho. Você fez certo. Por favor não se odeie por isso agora. Depois a gente odeia juntas, se precisar."},
     {s:"night", sp:"", t:"choices", choices:[
-      {label:"Pedir para parar por hoje. Rem está tremendo", flag:"confianca"},
-      {label:"Pedir mais um beijo, menor, porque o medo deixou Rem acesa", flag:"calor"}
+      {label:"Pedir para parar por hoje. Sair separadas. Ajeitar o laço.", flag:"confianca"},
+      {label:"Pedir mais um beijo, menor, porque o medo deixou as duas acesas.", flag:"calor"}
     ]},
-    {s:"night", sp:"", t:"{confianca:Elas saem separadas. Rem ajeita o laço no reflexo da assadeira. Ma some pelo corredor dos fundos.}{calor:O segundo beijo é curto e com dente. Rem geme no pano do ombro de Ma e depois tapa a própria boca.}"},
-    {s:"night", sp:"Rem", t:"— Se Nee-sama pergunta, Rem fala da prateleira. Nee-sama não acredita em prateleira."},
-    {s:"night", sp:"Ma", t:"— Eu também ia tapar você. Só para constar."},
-    {s:"night", sp:"Rem", t:"— ...Rem gostou de ouvir. Rem não vai repetir no relatório."}
+    {s:"night", sp:"", t:"{confianca:Elas saem com um minuto entre uma e outra. Rem ajeita o laço no reflexo da assadeira: azul, orelha vermelha, farinha no ombro que não é dela. Ma some pelo corredor dos fundos e para duas vezes para escutar.}{calor:O segundo beijo é curto e com dente. Rem geme no pano do ombro de Ma e tapa a própria boca depois, olhos arregalados. Ma também gemeu. As duas fingem que foi o pote.}"},
+    {s:"night", sp:"", t:"Na bacia da despensa a água está fria. Rem esfrega entre os dedos como se saliva fosse sangue de serviço. Ma enxuga no avental de Rem, pede desculpa, enxuga de novo. Farinha vira lama clara no pano."},
+    {s:"night", sp:"Rem", t:"— Se Nee-sama pergunta, Rem fala da prateleira. Nee-sama não acredita em prateleira. Rem mesmo assim fala. Rem é constante até na mentira ruim."},
+    {s:"night", sp:"Ma", t:"— Eu também ia tapar você. Só para constar. E obrigada por empurrar. Eu sei que doeu. Depois eu vejo o ombro. Se você deixar. Posso só olhar. Não precisa ser... o outro."}
   ]
 };
 
 CHAPTERS.e4 = {
   label:"IV — A boca que tosse",
-  end:"Rem escovou os dentes três vezes. Ainda sentia pelo. Ma deixou água no criado-mudo.",
+  end:"Rem escovou os dentes três vezes. Ainda sentia pelo. Ma deixou água no criado-mudo e ficou acordada contando a respiração dela.",
   beats:[
-    {s:"night", sp:"", t:"Quarto. Porta encostada, não trancada — lição da despensa. Rem ajoelha porque o corpo pede e a cabeça ainda discute."},
-    {s:"heat", sp:"Rem", t:"— Rem vai tentar a boca. Se for nojento demais, Rem para. Rem fala parar. Ma-san escuta."},
-    {s:"heat", sp:"Ma", t:"— Escuto. E isso aqui não é para outra boca. Só para deixar dito."},
-    {s:"heat", sp:"Rem", t:"— Rem... gosta quando Ma-san fala isso. Rem também não quer outra boca. Rem é gananciosa. Rem pede desculpa."},
-    {s:"heat", sp:"", t:"Pelo no lábio. Debaixo do tufo o pau é pequeno e está meio sujo — um gosto de pele que não viu água direito, salgado, um pouco rançoso. Rem tosse de verdade, afasta, olhos cheios."},
-    {s:"heat", sp:"Rem", t:"— Ruim. Rem não sabia que tinha gosto. Espera. Rem não acabou."},
-    {s:"heat", sp:"", t:"Ela volta. Melhor um palmo. Ainda tosse no meio. O pau pequeno cabe; a garganta não concorda."},
-    {s:"heat", sp:"Ma", t:"— Para. Você chorou."},
-    {s:"heat", sp:"Rem", t:"— Rem chora fácil. Não é o mesmo que não querer."},
+    {s:"night", sp:"", t:"Quarto. Porta encostada, não trancada — lição da despensa. A vela é baixa de propósito, luz laranja no chifre de Rem e no de Ma. Rem ajoelha porque o corpo pede chão. A madeira é fria no joelho. A cabeça ainda discute com o corpo, em voz baixa, perdendo."},
+    {s:"heat", sp:"Rem", t:"— Rem vai tentar a boca. Se for nojento demais, Rem para. Rem fala parar. Ma-san escuta. Ma-san também pode falar parar. As duas. Igual. Rem não quer que Ma-san finja que gosta se não gostar."},
+    {s:"heat", sp:"Ma", t:"— Escuto. Eu não sei o que fazer com a mão. Se eu puser no seu cabelo você deixa? Se não deixar eu deixo no colchão. Estou com vergonha de perguntar isso. Também estou com vergonha do cheiro. Os dois."},
+    {s:"heat", sp:"Rem", t:"— Pode o cabelo. Sem puxar. Rem gosta quando Ma-san pergunta. Rem também não quer outra boca. Rem é gananciosa. Rem pede desculpa por ser gananciosa. Rem não para de ser."},
+    {s:"heat", sp:"", t:"A camisola sobe até a barriga, puxada pelas duas ao mesmo tempo, sem combinado. O pau pequeno aparece no tufo escuro, meio duro, meio assustado, um pouco à esquerda. Na dobra da cabeça tem um branco-amarelado grudado, brilhante na vela, mais grosso de um lado — cio que não deixa secar, balde que não entra na dobra, Ma que tem vergonha de pedir a Frederica-san um pano só para aquilo. O cheiro sobe quente e específico: virilha de Ma, não de homem de livro; um ranço baixo misturado com o doce-errado do calor dela, cera do quarto, um fio de xixi velho que ela segurou o dia inteiro porque tinha medo de o banheiro ter orelha. Rem pisca forte. A saliva vem contra a vontade. O estômago sobe e desce."},
+    {s:"heat", sp:"Ma", t:"— Não olha tanto. Ou olha. Eu não sei. Está sujo. Eu tentei o balde. O sabão da cozinha não tira isso da dobra. Desculpa. Você pode só encostar o rosto na coxa. Não precisa da boca. Eu já fico... assim... se você encostar."},
+    {s:"heat", sp:"Rem", t:"— Rem quer a boca. Rem está com nojo. Rem quer mesmo assim. Rem vai devagar. Se tosse, tosse. Tosse não é não. Não é a palavra não. Ela ajeita o cabelo azul para trás da orelha com a mão que ainda cheira a bacia. Ma vê o ajeitar — tão de serviço — e o pau lateja contra a palma dela, vergonhoso."},
+    {s:"heat", sp:"", t:"Pelo no lábio — grosso, um pouco duro na raiz, gosto de pele que passou o dia sob a camisola. A cabeça é lisa e quente demais para noite fria. A dobra é pegajosa: o branco derrete na língua de Rem e vira um gosto amargo-doce, queimado na ponta, como leite que subiu na panela e grudou. Não é leite. Rem sabe. O estômago vira. Ela segura o joelho para não cuspir na colcha. Rem tosse de verdade, afasta, olhos cheios. Um fio de baba fica no tufo, brilhando na vela. Ma solta um som de desculpa e cobre o pau com as duas mãos."},
+    {s:"heat", sp:"Rem", t:"— Ruim. Rem não sabia que tinha gosto. Espera. Rem não acabou. Rem só precisava da tosse. A tosse não é não. Rem volta. Mais um palmo."},
+    {s:"heat", sp:"", t:"A tosse de Rem é de cozinha: seca, curta, a mesma que ela usa quando a pimenta sobe. Ma ouve e encolhe, cobre o pau, os olhos enchem porque acha que é rejeição. Rem vê o encolher e o coração aperta de um jeito que não é tesão — é medo de ter feito Ma se odiar. Por isso ela volta. Não por coragem. Por consertar o encolher. O segundo som que Ma faz é diferente: um soluço pequeno, aliviado, vergonhoso. Rem sente o soluço no joelho, na palma, no chifre."},
+    {s:"heat", sp:"Ma", t:"— Para se quiser. Por favor não força porque eu estou aqui. Eu também posso só te abraçar. Não precisa disso para ficar. Eu... gostei de você tossir e ficar. Isso é que é demais. Desculpa."},
+    {s:"heat", sp:"", t:"Ela volta. O pau pequeno cabe na boca; a garganta não concorda. Pelo no dente. O branco da dobra gruda na língua, amargo. Rem segura o joelho de Ma, unhas curtas, e não desce mais que isso. Ma chora sem barulho, mão no cabelo azul, sem puxar, só existindo ali."},
     {s:"heat", sp:"", t:"choices", choices:[
-      {label:"Parar na segunda tosse e só ficar colada", flag:"confianca"},
-      {label:"Tentar mais uma vez, mais devagar, e engolir o que vazar", flag:"filth"}
+      {label:"Parar na segunda tosse. Deitar no colo. Deixar o pau esquecido.", flag:"confianca"},
+      {label:"Tentar mais uma vez, mais devagar, e engolir o que vazar.", flag:"filth"}
     ]},
-    {s:"heat", sp:"", t:"{confianca:Rem deita no colo. Ma penteia. O pau fica esquecido, ainda com o cheiro. Rem não pede para lavar. Ainda não sabe se lavar é fuga ou cuidado.}{filth:Rem volta. A língua limpa a dobra da cabeça — aquele branco grudado. Gosto forte. Ela engole e faz cara feia. — Rem fez. Rem não sabia o nome. Rem gostou de ter feito.}"},
-    {s:"night", sp:"Rem", t:"— Se outra pessoa fizesse isso em Ma-san, Rem... Rem ia ficar quieta. Rem ia odiar ficar quieta."},
-    {s:"night", sp:"Ma", t:"— Ninguém vai. Eu também não deixo."},
-    {s:"night", sp:"", t:"Aftercare: bacia, pano na boca. Rem murmura que Nee-sama lava melhor. Ma discorda em voz baixa."}
+    {s:"heat", sp:"", t:"{confianca:Rem deita no colo. Ma penteia, desfaz o laço, ajeita, desfaz de novo. O pau fica de lado, ainda fedendo. Rem não pede para lavar. Ainda não sabe se lavar é fuga ou cuidado. As duas respiram até o peito descer. A vela chia.}{filth:Rem volta. A língua limpa a dobra da cabeça — aquele branco grudado de cio e de balde mal feito. O gosto é de Ma: amargo-doce, queimado na ponta, leite que subiu na panela, um fio de xixi velho por baixo. Ela engole um pouco e faz cara feia. Ma cobre o próprio rosto. Rem fez. Rem não sabia o nome. Rem gostou de ter feito. Rem também odiou. As duas coisas no mesmo gole.}"},
+    {s:"night", sp:"Rem", t:"— Se outra pessoa fizesse isso em Ma-san, Rem ia ficar quieta. Rem ia odiar ficar quieta. Rem pede desculpa por pensar nisso com a boca ainda assim. Rem é oni. Rem é empregada. Rem é isto."},
+    {s:"night", sp:"Ma", t:"— Ninguém vai. Eu também não deixo. Vem. Tem água. Eu pus no criado-mudo antes. Achei que ia precisar. Não achei que ia ser você tossindo. Desculpa. Pode o copo inteiro."},
+    {s:"night", sp:"", t:"Rem lava a boca no copo, três goles. O gosto não sai de todo. Ma ajeita o cobertor nos dois ombros, beija o cabelo, não o lábio — ainda tem vergonha do lábio. Rem encosta a testa no peito dela e conta as tábuas do teto até o número perder o sentido. O coração das duas bate fora de hora, depois encontra um ritmo ruim, suficiente."},
+    {s:"night", sp:"Rem", t:"— Nee-sama lava melhor. Rem sabe. Rem mesmo assim quer que seja Ma-san que ponha a água. Rem é injusta com Nee-sama. Rem vai dormir injusta."},
+    {s:"night", sp:"Ma", t:"— Dorme injusta. Eu fico. Se você tossir dormindo eu ponho a mão nas costas. Só isso. Não vou pedir a boca de novo hoje. Eu também não aguento pedir."}
   ]
 };
 
 CHAPTERS.e5 = {
   label:"V — Água que cura",
-  end:"A luz azul sumiu do quarto. Rem dormiu com a palma na asa fechada de Ma.",
+  end:"A luz azul sumiu do quarto. Rem dormiu com a palma na asa fechada de Ma. O cheiro do fundo ficou no travesseiro.",
   beats:[
-    {s:"heat", sp:"", t:"Rem senta no colo, ainda de camisola erguida. Buceta peluda no pau, sem entrar. Esfrega errado. Depois menos errado."},
-    {s:"heat", sp:"Rem", t:"— Assim. Ali. Rem não sabe o nome. Rem sabe o lugar."},
-    {s:"heat", sp:"", t:"Ma vira ela. A buceta de Rem é peluda, escura no meio, um cheiro de dia de saia. Mais acima o cu está no meio de pelinhos e não está limpo de livro — fedido de corpo que só lava depressa no balde. Ma encosta o nariz e recua um segundo. Volta."},
-    {s:"heat", sp:"Ma", t:"— Isso... não é perfume."},
-    {s:"heat", sp:"Rem", t:"— Rem lavou. Rem lavou de novo. Ainda assim. Rem não sabia que o fundo ficava. Rem não quer que Ma-san ache... ruim demais. Rem quer que ache só de Rem."},
-    {s:"heat", sp:"Ma", t:"— É seu. O cheiro também. Eu volto."},
-    {s:"heat", sp:"", t:"Língua na buceta, sobe, para no cu, desce. O gosto é amargo. Rem enterra a cara no travesseiro."},
-    {s:"heat", sp:"Ma", t:"— Posso a ponta da língua aqui?"},
-    {s:"heat", sp:"Rem", t:"— Pode. Se doer do jeito errado Rem fala. Rem... ah."},
-    {s:"heat", sp:"", t:"A língua cansa. Rem está inchada, arranhada de dente sem querer. Ela põe as duas mãos sobre o próprio colo e puxa mana — luz azul de água, a mesma que fecha corte de faca na cozinha."},
-    {s:"heat", sp:"Rem", t:"— Frio. Espera. Rem cura o que a boca estragou. Não o que Rem quis."},
-    {s:"heat", sp:"", t:"A ardência some. O tesão não. Ma beija a luz como se fosse pele."},
+    {s:"heat", sp:"", t:"Outra noite. A camisola de Rem está erguida até a cintura porque ela mesma puxou, vermelha até o chifre. Ela senta no colo de Ma de lado primeiro: joelho, peso, dúvida. Depois de frente, sem saber onde pôr a canela. A buceta peluda encosta no pau por cima, sem entrar. Esfrega errado. A tela da camisola de Ma fica úmida, escura num ponto."},
+    {s:"heat", sp:"Rem", t:"— Assim. Ali. Rem não sabe o nome. Rem sabe o lugar. Se doer do jeito errado Rem fala. Ma-san também fala. As duas. Igual. Rem não quer ser a única que tem medo. Quando ela senta de frente, a saia sobe sozinha no quadril; o laço nas costas puxa. Ma segura o quadril por cima do pano, insegura do peso, e o pau dela esbarra no pelo de Rem com um som molhado, pequeno, que as duas fingem não ter ouvido."},
+    {s:"heat", sp:"Ma", t:"— Está quente. Eu tenho medo de ir rápido. Me avisa se o peso estiver ruim. Eu não sou leve. As asas querem abrir. Eu não deixo. Se abrirem, fecha. Com a mão. Por favor. A asa esquerda abre um palmo apesar do pedido. Rem fecha, palma inteira no couro quente, e Ma solta um som de alívio que não é tesão — é de ter sido escolhida."},
+    {s:"heat", sp:"", t:"Ma vira ela com um cuidado de quem vira prato quente. A buceta de Rem é peluda de um preto-azulado na raiz, o mesmo tom que some no cabelo quando está molhado. No meio está escuro e úmido de tesão novo misturado com o dia: saia de empregada fechada, sabão da bacia que ela passou por fora e não soube passar por dentro, um azedo baixo de quem ficou de pé na cozinha desde o café. Mais acima o cu está no meio dos pelinhos, um pouco sujo de verdade — Rem lava o balde depressa, de costas para Nee-sama, e não alcança o que acha que já está limpo. O cheiro é amargo, de corpo oni no fim do expediente, um pouco de pum preso que ela segurou no corredor para não fazer barulho na frente de Petra. Ma recua um segundo. Não é perfume. É Rem. Ma encosta o nariz e recua um segundo, o olho cheio. Volta, porque Rem está olhando por cima do ombro, assustada de ser deixada."},
+    {s:"heat", sp:"Ma", t:"— Isso não é perfume. Desculpa. Eu não ia falar. Falei. Posso a língua mais embaixo? Se você odiar eu subo. Eu... também tenho isso. Eu também lavei mal. A gente é duas lavagens ruins."},
+    {s:"heat", sp:"Rem", t:"— Rem lavou. Rem lavou de novo. Ainda assim. Rem não sabia que o fundo ficava. Rem não quer que Ma-san ache ruim demais. Rem quer que ache só de Rem. Rem sabe que isso é feio. Rem fala feio quando gosta."},
+    {s:"heat", sp:"", t:"A língua de Ma abre o meio peludo. O gosto não é de livro: é Rem no fim do expediente — sabão da bacia por fora, azedo de saia fechada por dentro, um fundo de cebola que vive na pele dela desde o almoço. Quando a língua sobe para o cu, o amargo muda: mais grosso, mais de corpo, um resto que o balde não levou porque Rem lava de costas para Nee-sama e acha que já está limpo. Ma sente náusea e tesão no mesmo gole. Rem enterra a cara no travesseiro — o travesseiro do quarto de visitas, que já fede a cera e agora a ela — e solta um som feio. A asa esquerda de Ma abre um palmo e cai."},
+    {s:"heat", sp:"Ma", t:"— Posso a ponta da língua aqui? No lugar de trás. Só a ponta. Eu paro no meio se você bater na cama. Pode bater. Eu escuto madeira."},
+    {s:"heat", sp:"Rem", t:"— Pode. Se doer do jeito errado Rem fala. Rem... ah. Rem não sabia que a ponta... Rem não vai contar para Nee-sama. Rem não vai contar para ninguém. Rem conta para Ma-san porque Ma-san já está aí."},
+    {s:"heat", sp:"", t:"O ah de Rem não é bonito. É alto demais para parede fina, depois ela morde o travesseiro e o som vira um uivo preso, molhado. Ma para um segundo — náusea ainda na língua, tesão no pau contra o colchão — e a pausa assusta Rem: ela pensa que Ma vai sair. As costas de Rem endurecem. Ma vê as costas endurecerem e beija a coxa por dentro, só para dizer estou, sem palavra. O chifre de Rem bate na cabeceira. Madeira. As duas congelam. Ninguém no corredor. O coração delas que faz o barulho agora."},
+    {s:"heat", sp:"", t:"A língua cansa. Rem está inchada, arranhada de dente sem querer — Ma mordeu o lábio dela mesma e o dente resvalou. Rem põe as duas mãos sobre o próprio colo e puxa mana. Luz azul de água, a mesma que fecha corte de faca na cozinha, desce pelo ventre até o lugar que arde. Frio. Cheiro de chuva curta. O ardor some. O tesão não. O cheiro do fundo fica."},
+    {s:"heat", sp:"Rem", t:"— Frio. Espera. Rem cura o que a boca estragou. Não o que Rem quis. O que Rem quis pode ficar. O ardor não. Roswaal-sama chamaria isso de desperdício. Rem chama de noite."},
     {s:"heat", sp:"", t:"choices", choices:[
-      {label:"Pedir para Ma sentar o rosto mais fundo, agora que não arde", flag:"calor"},
-      {label:"Pedir só a cura e o colo. Rem já teve o bastante", flag:"confianca"}
+      {label:"Pedir para Ma pôr o rosto mais fundo, agora que não arde. Rem segura a cabeceira.", flag:"calor"},
+      {label:"Pedir só o colo e a luz. Rem já teve o bastante para uma noite.", flag:"confianca"}
     ]},
-    {s:"heat", sp:"", t:"{calor:Rem desce no rosto. Pelinhos no nariz de Ma. Ela geme e segura a cabeceira para não sentar com peso de oni.}{confianca:Luz azul. Cobertor. Rem conta as tábuas do teto até o coração descer.}"},
-    {s:"night", sp:"Rem", t:"— A cura é para ferido. Rem usou para tesão. Roswaal-sama chamaria isso de desperdício. Rem chama de noite."},
-    {s:"night", sp:"Rem", t:"— Ma-san. Se Emilia-sama pedir para Ma-san sentar no jardim de novo... Rem vai servir o chá e vai ficar quieta. Rem vai odiar ficar quieta."},
-    {s:"night", sp:"Ma", t:"— Então eu sento do seu lado. Sempre."}
+    {s:"heat", sp:"", t:"{calor:Rem desce no rosto com medo do próprio peso. Pelinhos no nariz de Ma. Ela geme e segura a cabeceira com força de oni, para não sentar de verdade. Ma segura a coxa, não empurra, só fica. As duas choram um pouco e não comentam. A luz azul ainda brilha fraca entre os pelos.}{confianca:Luz azul de novo, menor. Cobertor. Rem conta as tábuas do teto até o coração descer. Ma conta junto, errado no sete, e Rem corrige o número baixinho. As duas riem sem som.}"},
+    {s:"night", sp:"Rem", t:"— Rem vai dormir com a mão na asa. Se a asa abrir, Rem fecha. Com carinho. Com medo. Se Emilia-sama pedir para Ma-san sentar no jardim, Rem serve o chá e odeia ficar quieta. Rem mesmo assim fica. Rem é empregada. Rem também é isto."},
+    {s:"night", sp:"Ma", t:"— Pode a asa. Eu gosto quando você fecha. Parece que alguém escolheu. Eu sento do seu lado. Sempre. Mesmo se o aceno vier. Mesmo se eu ficar vermelha. Eu fico vermelha fácil. Você já viu."},
+    {s:"night", sp:"Rem", t:"— Rem viu. Rem gosta. Rem não empresta o lado da cama. Dorme. Rem conta a respiração de Ma-san agora. Se contar errado, Ma-san não corrige. Rem corrige sozinha. Rem é assim."}
   ]
 };
+
+
 
 CHAPTERS.e6 = {
   label:"VI — Interruptor",
@@ -288,7 +303,7 @@ CHAPTERS.e6 = {
     {s:"heat", sp:"Rem", t:"— Então Rem aperta um pouco. Rem também é oni. Rem esquece quando lava chão."},
     {s:"heat", sp:"", t:"Chifre em chifre. Estalo. Rem ri no nariz dela. Mana nas duas pontas: um formigamento que desce até o pau e até a buceta, ao mesmo tempo."},
     {s:"heat", sp:"Rem", t:"— Ah— isso não é mão. Isso é... dentro."},
-    {s:"heat", sp:"Ma", t:"— Só você aperta assim. Se outra mão chegar no chifre eu quebro."},
+    {s:"heat", sp:"Ma", t:"— Só você aperta assim. Se outra mão chegar eu... eu tiro. Com vergonha. Não com força. Eu acho."},
     {s:"heat", sp:"Rem", t:"— Rem também. Rem ia... Rem não ia fazer mal. Rem ia tirar a mão. Com força."},
     {s:"night", sp:"", t:"Passos. Petra, cantarolando errado no corredor. As asas se fecham com um bater seco demais."},
     {s:"night", sp:"Petra", t:"— Rem-neesama? Tem poeira na— ah. Desculpa. Pensei que estava vazia."},
@@ -309,7 +324,7 @@ CHAPTERS.e7 = {
   label:"VII — Andar assim",
   end:"O avental foi lavado duas vezes. A brincadeira ficou. Frederica não falou nada. Isso foi pior.",
   beats:[
-    {s:"night", sp:"Ma", t:"— Proposta feia. A gente se arruma. Você vai servir o pão. Por baixo... ainda molhado. Só um pouco. Se for demais a gente para no corredor."},
+    {s:"night", sp:"Ma", t:"— Eu pensei uma coisa feia. Se for demais a gente não faz. Você ia servir o pão. Por baixo... ainda um pouco. Só se você quiser. Eu fico no corredor. Eu... não mando. Eu pergunto."},
     {s:"night", sp:"Rem", t:"— Rem... aceita. Rem odeia aceitar. Rem aceita. Se Nee-sama cheirar, Rem morre. Rem aceita mesmo assim."},
     {s:"night", sp:"Ma", t:"— Se alguém encostar em você no hall, a brincadeira acaba. Eu puxo você."},
     {s:"night", sp:"Rem", t:"— Rem também puxa Ma-san. Rem é forte. Rem usa isso para prato. Hoje Rem usa para isso."},
@@ -393,7 +408,7 @@ CHAPTERS.e10 = {
   beats:[
     {s:"heat", sp:"", t:"Cio mais alto. Os seios de Ma doem. Uma gota esbranquiçada no tecido. Rem olha como olha leite azedo: com ofício."},
     {s:"heat", sp:"Rem", t:"— Saiu. Rem pode... Rem quer ver se é gosto de leite ou de monstro."},
-    {s:"heat", sp:"Ma", t:"— Só você. Se outra boca chegar aqui eu fecho a asa."},
+    {s:"heat", sp:"Ma", t:"— Se outra boca chegar eu... eu escondo. Não é ordem. É medo. Você que... você que está aqui."},
     {s:"heat", sp:"Rem", t:"— Rem não deixa chegar. Rem... vai tentar não ser assustadora. Rem vai falhar."},
     {s:"heat", sp:"", t:"É os dois. Rem tosse. Volta. Engole de propósito um gole pequeno."},
     {s:"heat", sp:"Rem", t:"— Doce errado. Rem fez. Rem não vai escrever isso."},
@@ -406,7 +421,7 @@ CHAPTERS.e10 = {
       {label:"Pedir para andar assim até a porta e voltar. Só as duas", flag:"filth"}
     ]},
     {s:"heat", sp:"", t:"{confianca:O ar sai. Rem mama o seio de Ma com cuidado de ferido. Luz azul no próprio ventre, por mania.}{filth:Cinco passos até a porta. Cinco de volta. Rem está vermelha até o chifre. Ma solta o feitiço. As duas se encostam na madeira e riem sem barulho.}"},
-    {s:"night", sp:"", t:"Aftercare: pomada na membrana da asa, cabelo, água. Rem chama Ma de 'senhora' uma vez e finge que foi erro de etiqueta."},
+    {s:"night", sp:"", t:"Ma pede para Rem passar pomada na membrana da asa, vermelha, sem olhar. Rem passa. Depois lava o cabelo dela com a bacia. Nenhuma das duas fala tesão. A água esfria no colo."},
     {s:"night", sp:"Ma", t:"— Pode chamar. Só você."},
     {s:"night", sp:"Rem", t:"— Rem gostou. Rem vai fingir que foi etiqueta. Rem é péssima em fingir."}
   ]
@@ -426,7 +441,7 @@ CHAPTERS.e11 = {
     {s:"night", sp:"Ma", t:"— Não pede. Eu também não quero outra mão no meu chifre. A gente é duas oni ruins de etiqueta."},
     {s:"kiss", sp:"Rem", t:"— Depois... tem coisa que Rem ainda não é. Xixi de verdade. Sujeira. Nee-sama na porta. Emilia-sama sem entender. Betty sem entrar. Rem quer isso longe. Rem quer Ma-san perto. Só perto de Rem."},
     {s:"kiss", sp:"Ma", t:"— Longe. Perto. Só você. Eu sei a diferença."},
-    {s:"kiss", sp:"Rem", t:"— Aftercare de hoje é louça. Ma-san seca. Rem lava. Sem tesão. Com a toalha certa."},
+    {s:"kiss", sp:"Rem", t:"— Hoje é louça. Ma-san seca. Rem lava. Sem boca. Com a toalha certa. Rem gosta da toalha certa."},
     {s:"kiss", sp:"Ma", t:"— Sim, senhora."},
     {s:"kiss", sp:"Rem", t:"— ...Rem gostou. Rem vai fingir que não. Dorme. Do lado. Rem não empresta o lado."}
   ]
@@ -448,21 +463,22 @@ function saveProgress(n){
   localStorage.setItem("sombra_extras_progress", String(progress));
 }
 const SCENE_IMG = {
-  night: "sombra_cg/bed.jpg",
-  kiss: "sombra_cg/bed_close.jpg",
-  heat: "sombra_cg/heat1.jpg",
-  wet: "sombra_cg/bath.jpg",
-  filth: "sombra_cg/heat2.jpg"
+  night: "bg_quarto_simples.jpg",
+  kiss: "domesticidade_a_cama_a.jpg",
+  heat: "ma_rem_beijo_a.jpg",
+  wet: "domesticidade_a_banho_a.jpg",
+  filth: "ma_camisola_poses_sentada_abraco.jpg"
 };
 const EXTRA_IMG = {
-  "e1:0": "sombra_cg/bed.jpg",
-  "e1:6": "sombra_cg/bed_close.jpg",
-  "e1:16": "sombra_cg/kiss_close.jpg",
-  "e2:12": "sombra_cg/kiss2.jpg",
-  "e3:1": "sombra_cg/kiss3.jpg",
-  "e4:1": "sombra_cg/heat2.jpg",
-  "e5:0": "sombra_cg/heat1.jpg",
-  "e5:3": "sombra_cg/kiss_close.jpg"
+  "e1:0": "bg_quarto_simples.jpg",
+  "e1:6": "domesticidade_a_cama_a.jpg",
+  "e2:0": "bg_cozinha.jpg",
+  "e2:10": "domesticidade_a_testa_a_testa.jpg",
+  "e3:0": "bg_corredor_dia.jpg",
+  "e4:0": "ma_camisola_poses_sentada_abraco.jpg",
+  "e5:0": "ma_rem_beijo_a.jpg",
+  "e9:0": "bg_jardim_fonte.jpg",
+  "e11:0": "bg_cozinha.jpg"
 };
 function setScene(k, imgPath){
   document.getElementById("bg").className = "bg" + (k && k!=="night" ? " "+k : "");
