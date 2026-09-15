@@ -68,7 +68,7 @@
   <div id="menu-card">
     <h1>Noites que a mansão não conta</h1>
     <p class="sub">devagar. depois o resto.</p>
-    <p class="warn">Onze noites iniciais. Quase pegas mais de uma vez. Cura de água. Chifre como interruptor. Leite e inflar só quando o calor pede. Humilhação ainda é brincadeira entre as duas. Ram fiscaliza. Emilia não entende. Betty não se oferece. Incesto e imundície pesada estão no plano, trancados.</p>
+    <p class="warn">Dezesseis noites. Quase pegas. O pesado continua trancado. Cura de água. Chifre como interruptor. Leite e inflar só quando o calor pede. Humilhação ainda é brincadeira entre as duas. Ram fiscaliza. Emilia não entende. Betty não se oferece. Incesto e imundície pesada estão no plano, trancados.</p>
     <div id="extra-list"></div>
     <button class="gold" id="reset-progress" style="margin-top:1.2rem">esquecer o que já leu</button>
   </div>
@@ -111,12 +111,21 @@ const CATALOG = [
   {id:"e9", title:"IX. A mansão fala baixo", blurb:"Ram fiscal. Emilia inocente. Betty e o silêncio.", unlock:8, sec:"agora"},
   {id:"e10", title:"X. O que a magia faz no corpo", blurb:"Leite. Inflar. Humilhação só no quarto.", unlock:9, sec:"agora"},
   {id:"e11", title:"XI. Sopa e a colher certa", blurb:"Louça. Caldo. O que fica para depois.", unlock:10, sec:"agora"},
-  {id:"p12", title:"XII. Cio de verdade (plano)", blurb:"Breeding, calor que não cabe no jantar.", unlock:99, sec:"depois"},
-  {id:"p13", title:"XIII. Água que não é cura (plano)", blurb:"Xixi de verdade, barriga o dia inteiro.", unlock:99, sec:"depois"},
-  {id:"p14", title:"XIV. O que não se lava (plano)", blurb:"Cocô, vômito, engolir, aftercare pesado.", unlock:99, sec:"depois"},
-  {id:"p15", title:"XV. Fique quieta (plano)", blurb:"Faixas, tapa, ordem. Ainda com cura depois.", unlock:99, sec:"depois"},
-  {id:"p16", title:"XVI. A irmã na soleira (plano)", blurb:"Ram só olha. Muito depois. Sem boca ainda.", unlock:99, sec:"depois"},
-  {id:"p17", title:"XVII. Faróis (plano)", blurb:"Emilia sem entender. Betty fiscaliza, não entra.", unlock:99, sec:"depois"}
+  {id:"e12", title:"XII. O som que não era gemido", blurb:"Peido no colo. Vergonha. Asa na boca.", unlock:11, sec:"agora"},
+  {id:"e13", title:"XIII. O dia inteiro", blurb:"Segurar xixi no serviço. Quase vaza. O quarto.", unlock:12, sec:"agora"},
+  {id:"e14", title:"XIV. Acordar no meio", blurb:"Uma acorda. A outra não sabe se continua.", unlock:13, sec:"agora"},
+  {id:"e15", title:"XV. O avental marca", blurb:"Leite no serviço. Nee-sama pergunta. Emilia erra a pergunta.", unlock:14, sec:"agora"},
+  {id:"e16", title:"XVI. A soleira", blurb:"Ram olha um pouco mais. Betty descreve. Sem boca.", unlock:15, sec:"agora"},
+  {id:"p17", title:"XVII. Cio que pede encher (plano)", blurb:"Breeding. Ainda com medo.", unlock:99, sec:"depois"},
+  {id:"p18", title:"XVIII. Água no chão (plano)", blurb:"Xixi de verdade no quarto.", unlock:99, sec:"depois"},
+  {id:"p19", title:"XIX. O que não se lava (plano)", blurb:"Cocô: ver, cheirar, quase, falhar.", unlock:99, sec:"depois"},
+  {id:"p20", title:"XX. Engolir de propósito (plano)", blurb:"Porra, leite, xixi, vômito — decisão.", unlock:99, sec:"depois"},
+  {id:"p21", title:"XXI. Cabo da colher (plano)", blurb:"Objeto da casa. Param no meio.", unlock:99, sec:"depois"},
+  {id:"p22", title:"XXII. Uniforme o dia todo (plano)", blurb:"Cheiro no avental indo servir.", unlock:99, sec:"depois"},
+  {id:"p23", title:"XXIII. Faixa e tapa (plano)", blurb:"Ainda pedindo licença.", unlock:99, sec:"depois"},
+  {id:"p24", title:"XXIV. Nee-sama na cadeira (plano)", blurb:"Ram olha mais. Sem boca ainda.", unlock:99, sec:"depois"},
+  {id:"p25", title:"XXV. A pergunta do chá (plano)", blurb:"Emilia entende meio.", unlock:99, sec:"depois"},
+  {id:"p26", title:"XXVI. Betty conta (plano)", blurb:"Cruel. Não entra.", unlock:99, sec:"depois"}
 ];
 
 const CHAPTERS = {};
@@ -438,6 +447,118 @@ CHAPTERS.e11 = {
     {s:"kiss", sp:"Rem", t:"— Depois tem coisa que Rem ainda não é. Xixi de verdade. Sujeira. Nee-sama na porta. Emilia-sama sem entender. Betty sem entrar. Rem quer isso longe. Rem quer Ma-san perto. Só perto de Rem."},
     {s:"kiss", sp:"Ma", t:"— Longe. Perto. Só você. Eu sei a diferença. Dorme do meu lado. Sem emprestar. Eu também não empresto."},
     {s:"kiss", sp:"Rem", t:"— Rem gostou. Rem vai fingir que foi etiqueta. Dorme. Rem conta a respiração. Se contar errado, Rem corrige sozinha. Rem é assim."}
+  ]
+};
+
+
+
+CHAPTERS.e12 = {
+  label:"XII — O som",
+  end:"Rem lavou o colo da camisola de Ma. As duas juraram que foi o colchão. Nenhuma acreditou na outra.",
+  beats:[
+    {s:"heat", sp:"", t:"Quarto. Rem no colo de Ma, de lado, saia erguida o bastante para o pelo da coxa grudar na camisola vinho. Estão se beijando de verdade — língua lenta, parando quando o dente ameaça. O chifre de Ma lateja longe da mão. Ninguém aperta hoje."},
+    {s:"heat", sp:"Ma", t:"— Espera. A barriga. O caldo. Eu... se eu mexer assim vai sair som. Não é o som bom. Desculpa. Pode descer do colo."},
+    {s:"heat", sp:"Rem", t:"— Rem pode ficar. Rem também tem medo do som. Rem fica mesmo assim. Se sair, Rem não ri. Rem também não sabe se consegue não rir. Rem avisa."},
+    {s:"heat", sp:"", t:"Ma mexe um milímetro. O som sai baixo, quente, úmido, preso entre a coxa de Rem e a camisola. Cheiro muda na hora: cio mais o fundo do almoço, um azedo que não é suor. Rem pisca. O estômago sobe. Ma cobre o rosto com as duas mãos e solta um barulho de choro feio."},
+    {s:"heat", sp:"Ma", t:"— Saiu. Eu avisei. Desce. Por favor desce. Eu vou morrer aqui. O cheiro está no seu pelo. Eu sinto."},
+    {s:"heat", sp:"Rem", t:"— Rem sentiu. Rem está com nojo. Rem não desceu. Rem... pode a asa na boca em vez disso. Rem troca o cheiro. Rem é idiota. Rem fica."},
+    {s:"heat", sp:"", t:"A membrana da asa na boca de Rem: morna, um pouco empoeirada de quarto fechado, gosto de pele que não é pele. Ma sobressalta porque a asa é tique. Rem segura o bordo com os lábios, sem dente. O cheiro do colo ainda está entre elas. As duas respiram pela boca."},
+    {s:"heat", sp:"", t:"choices", choices:[
+      {label:"Descer do colo. Lavar o pano. Beijo na testa.", flag:"confianca"},
+      {label:"Ficar. Confessar que o nojo também acendeu. Sem repetir o som de propósito.", flag:"filth"}
+    ]},
+    {s:"heat", sp:"", t:"{confianca:Rem desce. Bacia. Sabão. Ma pede desculpa cinco vezes. Rem ajeita o cabelo torto e não fala do som.}{filth:Rem fica. Diz baixo que o nojo acendeu. Ma chora e ri no mesmo ar. Ninguém força outro som. A asa sai da boca com um fio de saliva.}"},
+    {s:"night", sp:"Rem", t:"— Rem não vai contar para Nee-sama. Rem ia contar se fosse outra coisa. Isto Rem enterra. Ma-san também. Combinado."},
+    {s:"night", sp:"Ma", t:"— Enterro. Obrigado por não descer na hora. Obrigado por descer se você desceu. Eu não sei qual você escolheu. Eu fico com as duas."}
+  ]
+};
+
+CHAPTERS.e13 = {
+  label:"XIII — O dia inteiro",
+  end:"A bacia ficou no quarto. Rem lavou o chão embora não tivesse pingado. Ma segurou a mão dela o caminho inteiro de volta à cama.",
+  beats:[
+    {s:"night", sp:"", t:"Manhã. Rem bebe pouco de propósito e mesmo assim a bexiga acorda cedo. Ma também, cio apertando baixo. Elas se olham na cozinha e não falam. O combinado da noite foi: aguentar. Ver. Só ver. Sem xixi ainda."},
+    {s:"night", sp:"Rem", t:"— Rem serve o café. Rem não vai ao banheiro. Se Nee-sama mandar Rem ir, Rem vai. Rem não é tola o bastante para desobedecer Nee-sama por isto."},
+    {s:"night", sp:"Ram", t:"— A irmã mais nova anda torta. Ram não perguntou. Anda direito."},
+    {s:"night", sp:"", t:"Meio-dia. A barriga de Rem está baixa, quente, chata de vontade. Cada degrau do corredor é um cálculo. Ma passa por ela com a jarra e o ombro se tocam. As duas travam a respiração. Emilia chama Ma para o jardim. Ma balança a cabeça, vermelha. Emilia acha que é sol."},
+    {s:"night", sp:"Ma", t:"— Eu quase... no jardim. Quase. A saia. Eu vim embora. Desculpa ter vindo embora. Eu não ia fazer na frente dela. Eu juro."},
+    {s:"night", sp:"Rem", t:"— Rem também quase. Na pia. Rem fechou a torneira com força. Rem está com raiva da torneira. Rem quer o quarto. Agora. Se Frederica-san ver o passo, Rem fala de cólica. Rem mente de cólica."},
+    {s:"heat", sp:"", t:"Quarto. Porta encostada. Elas não tiram a roupa inteira. Rem levanta a saia. Ma a camisola. As duas agacham perto da bacia, coxas tremendo, e não conseguem começar. O corpo segura por teimosia. Rem ri um riso feio. Ma chora de rir."},
+    {s:"heat", sp:"Rem", t:"— Rem não consegue. Rem segurou demais. Ma-san primeiro. Rem vira o rosto. Rem mente. Rem vai olhar."},
+    {s:"heat", sp:"", t:"O xixi de Ma sai em fio irregular, quente, cheiro forte de cio fechado o dia inteiro — amônia baixa, doce-errado. Bate na bacia com um som que as duas acham alto demais. Rem olha. O estômago vira. A bexiga dela cede um segundo e um fio escapa na coxa, escorre no pelo, morno. Ela tapa com a mão. A mão fica molhada. Cheiro delas misturado."},
+    {s:"heat", sp:"", t:"choices", choices:[
+      {label:"Parar no que pingou. Limpar. Não pedir para cheirar a mão.", flag:"confianca"},
+      {label:"Cheirar a mão. Fazer careta. Não lamber ainda.", flag:"filth"}
+    ]},
+    {s:"heat", sp:"", t:"{confianca:Rem lava a coxa e a bacia. Ma segura o cabelo dela para não cair na água. Nenhuma lambe. O nojo basta.}{filth:Rem cheira a palma. É ela e Ma juntas, salitre e cio. Careta. Náusea. Tesão. Ela não lambe. Ma vê a careta e esconde o rosto, aliviada da língua que não veio.}"},
+    {s:"night", sp:"Rem", t:"— Rem limpou o chão que não molhou. Rem é assim. Amanhã Rem bebe água. Rem não faz o dia inteiro de novo tão cedo. Rem mentiu no tão cedo."},
+    {s:"night", sp:"Ma", t:"— Eu também menti. A tua mão... eu vi. Obrigado por não ir além. Eu não aguentava além. Apertar a mão agora pode."}
+  ]
+};
+
+CHAPTERS.e14 = {
+  label:"XIV — Acordar",
+  end:"Ma pediu desculpa dormindo. Rem fingiu que não ouviu. De manhã as duas sabiam que tinham ouvido.",
+  beats:[
+    {s:"night", sp:"", t:"Madrugada. Rem acorda primeiro. A mão de Ma está entre as coxas dela, por cima da calcinha de empregada, parada, quente, sem ritmo. Ma dorme de boca aberta, um fio de baba no queixo, asa caída para fora da camisola."},
+    {s:"night", sp:"Rem", t:"— ...Ma-san. Rem está acordada. A mão. Rem pode tirar. Rem também pode deixar. Rem está perguntando para quem dorme. Rem é tola."},
+    {s:"night", sp:"", t:"Ma resmunga um som que não é palavra. Os dedos apertam um pouco o pano úmido. Rem prende o ar. O corpo quer. A cabeça conta Nee-sama no outro quarto. Rem pega o pulso de Ma e não tira — só impede de ir além."},
+    {s:"night", sp:"Ma", t:"— Hm. Rem... espera. Eu estava... eu sonhei. A mão. Desculpa. Eu posso tirar. Eu tiro."},
+    {s:"night", sp:"Rem", t:"— Tira se Ma-san quiser. Rem segurou o pulso. Rem não queria que fosse sem Ma-san aqui. Agora Ma-san está. Rem ainda tem medo. Rem está molhada. As duas coisas."},
+    {s:"night", sp:"", t:"Elas ficam assim um minuto: pulso na palma, calcinha úmida, vela morta, só o relógio. Ma beija o ombro de Rem por cima do avental dormido. Não desce a mão. Rem solta o pulso. A mão sai sozinha. As duas sentem a falta e o alívio."},
+    {s:"night", sp:"", t:"choices", choices:[
+      {label:"Dormir de novo. Só o ombro.", flag:"confianca"},
+      {label:"Um beijo na boca, acordadas. Sem a mão no meio.", flag:"calor"}
+    ]},
+    {s:"night", sp:"", t:"{confianca:Rem ajeita a asa para dentro da camisola. Ma murmura desculpa outra vez. O relógio. O sono.}{calor:O beijo é de boca dormida, gosto de saliva velha e de sopa de ontem. Rem faz careta e volta. Ma ri no escuro, envergonhada da baba.}"},
+    {s:"night", sp:"Rem", t:"— Outra noite a gente fala se pode continuar dormindo. Hoje Rem não sabe. Rem gostou de ter sido perguntada no meio do sono. Mesmo sendo Rem que perguntou."},
+    {s:"night", sp:"Ma", t:"— Da próxima eu quero estar acordada. Se eu fizer de novo dormindo, aperta o pulso. Eu gosto do pulso. Não gosto de te usar sem cara."}
+  ]
+};
+
+CHAPTERS.e15 = {
+  label:"XV — O avental",
+  end:"Rem lavou o avental com água fria até a mancha virar sombra. Ram não perguntou o nome da sombra. Emilia perguntou se era leite do chá.",
+  beats:[
+    {s:"night", sp:"", t:"Cio de manhã. Ma aperta o seio na despensa um segundo, só para a dor. Uma gota fura a camisola e, quando Rem passa para pegar farinha, fura também o avental. Branco no linho. Cheiro doce-errado no meio da farinha."},
+    {s:"night", sp:"Ma", t:"— Saiu. No teu. Desculpa. Esconde. Frederica-san. Eu... posso lamber o pano? Isso é nojento. Eu falei mesmo assim."},
+    {s:"night", sp:"Rem", t:"— Rem esconde com a bandeja. Rem não lambe aqui. Rem quer lamber aqui. Rem vai servir. Rem é empregada primeiro."},
+    {s:"night", sp:"", t:"Sala. Emilia aponta a sombra no avental com gentileza cruel de quem não sabe."},
+    {s:"night", sp:"Emilia", t:"— Rem derramou o leite do chá? Eu também derramo. Não precisa ficar vermelha. Ma-san também está vermelha. É o sol de novo?"},
+    {s:"night", sp:"Rem", t:"— Foi o leite do chá, Emilia-sama. Rem pede desculpa. Rem troca o avental depois."},
+    {s:"night", sp:"Ram", t:"— Rem não serve chá com leite nesta hora. Ram conhece o cardápio. Anda. Troca. Ram não perguntou o resto."},
+    {s:"night", sp:"", t:"No quarto das empregadas Rem tira o avental. A mancha está na frente, na altura da barriga. Ma veio atrás, porta encostada, e ajoelha sem pedir o chão direito. Língua no linho. O gosto é leite dela e farinha e sabão velho. Rem segura o chifre de Ma para não cair para frente."},
+    {s:"night", sp:"", t:"choices", choices:[
+      {label:"Tirar a boca do pano. Lavar juntos. Mentira do chá fica.", flag:"confianca"},
+      {label:"Deixar Ma acabar o que está no pano. Rem vigia a porta.", flag:"filth"}
+    ]},
+    {s:"night", sp:"", t:"{confianca:Água fria. As duas esfregam. A sombra fica. Rem usa o avental de Nee-sama emprestado e devolve antes do jantar.}{filth:Ma acaba o doce no linho. Careta. Engole. Rem beija o cabelo torto e escuta o corredor. Nee-sama passa e não para.}"},
+    {s:"night", sp:"Rem", t:"— Emilia-sama falou sol. Rem odiou o sol. Rem odiou mentir. Rem odiou gostar da mentira. Ma-san não acena para ela hoje."},
+    {s:"night", sp:"Ma", t:"— Não aceno. O pano era meu. A mentira também. Obrigado por deixar eu ajoelhar. Eu sei que o chão é teu."}
+  ]
+};
+
+CHAPTERS.e16 = {
+  label:"XVI — A soleira",
+  end:"Ram fechou a porta com o pé. Betty descreveu o som como quem descreve chá ruim. Rem serviu o jantar com o laço honesto e o peito em pedaço.",
+  beats:[
+    {s:"night", sp:"", t:"Noite. Quarto de visitas. Beijo lento. A mão de Rem no joelho de Ma, por cima. Nada de ponta. A tábua da cama range um pouco. A porta, encostada, abre mais um palmo."},
+    {s:"night", sp:"", t:"Ram está na soleira. Cabelo rosa, olho fechado de quem já viu o bastante e abriu mesmo assim. Não entra. O olhar vai ao laço de Rem — torto — e à camisola de Ma — no ombro. Para aí."},
+    {s:"night", sp:"Ram", t:"— Ram não perguntou. Ram viu. A irmã mais nova escolhe um laço e escolhe uma porta. Fecha direito. Ou não fecha. Ram cansa do meio."},
+    {s:"night", sp:"Rem", t:"— Rem pede desculpa, Nee-sama. Rem vai fechar. Rem... Nee-sama não precisa olhar Ma-san. Pode olhar Rem. Só Rem."},
+    {s:"night", sp:"Ram", t:"— Ciúme barato. Ram já comeu. Boa noite."},
+    {s:"night", sp:"", t:"A porta fecha com o pé. O silêncio depois é grosso. Ma está branca. Rem também. Elas não se beijam. Rem ajeita o laço até doer o couro cabeludo."},
+    {s:"night", sp:"Ma", t:"— Ela viu. Não viu o meio. Viu a gente. Eu queria sumir. Eu também fiquei... aliviada que foi ela e não Emilia-sama. Isso é feio. Desculpa."},
+    {s:"night", sp:"Rem", t:"— Rem também pensou isso. Rem se odeia por ter pensado. Nee-sama é Nee-sama. Rem mesmo assim não quer que ela olhe Ma-san assim. Rem falou demais na porta."},
+    {s:"night", sp:"", t:"De manhã, na passagem da biblioteca, Betty fala sem abrir."},
+    {s:"night", sp:"Beatrice", t:"— O range da cama de visitas não é de vento, eu suponho. Betty descreve mal de propósito. Não traga a oni de fogo aqui. Nem chá."},
+    {s:"night", sp:"", t:"choices", choices:[
+      {label:"Noites longe. Só sopa. Deixar Nee-sama esfriar.", flag:"confianca"},
+      {label:"Voltar ao quarto. Porta fechada de verdade. Só a testa.", flag:"calor"}
+    ]},
+    {s:"night", sp:"", t:"{confianca:Três noites de sopa. Ram conta o laço e não comenta. Ma espera. Rem leva pão e não entra.}{calor:Porta fechada. Tranca que quase não se usa. Testas. Sem range. Rem murmura que Nee-sama pode ouvir mesmo assim. Ma aperta a mão e não o chifre.}"},
+    {s:"night", sp:"Rem", t:"— Depois Nee-sama pode olhar mais. Não agora. Agora Rem quer Ma-san inteira e a porta inteira. Rem é gananciosa e covarde. As duas."},
+    {s:"night", sp:"Ma", t:"— Inteira. A porta. Só você. Betty que descreva o vento. A gente sabe o nome."}
   ]
 };
 
